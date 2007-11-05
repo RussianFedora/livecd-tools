@@ -1,7 +1,7 @@
 Summary: Tools for building live CD's
 Name: livecd-tools
 Version: 009
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPL
 Group: System Environment/Base
 URL: http://git.fedoraproject.org/?p=hosted/livecd
@@ -51,6 +51,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/livecd-tools/*
 
 %changelog
+* Mon Nov  5 2007 Jeremy Katz <katzj@redhat.com> - 009-3
+- And fix to actually work with F7
+
 * Mon Nov  5 2007 Jeremy Katz <katzj@redhat.com> - 009-2
 - Push new livecd-iso-to-disk that works with Fedora 8 live images
 

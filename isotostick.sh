@@ -173,10 +173,10 @@ if [ -z "$USBDEV" -o ! -b "$USBDEV" ]; then
     usage
 fi
 
-if [ -z "$noverify" ]; then
+if [ -z "$noverify" -a -x /usr/lib/anaconda-runtime/checkisomd5 ]; then
     # verify the image
     echo "Verifying image..."
-    checkisomd5 --verbose $ISO
+    /usr/lib/anaconda-runtime/checkisomd5 --verbose $ISO
     if [ $? -ne 0 ]; then
 	echo "Are you SURE you want to continue?"
 	echo "Press Enter to continue or ctrl-c to abort"
