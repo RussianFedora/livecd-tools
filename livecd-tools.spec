@@ -1,11 +1,12 @@
 Summary: Tools for building live CD's
 Name: livecd-tools
 Version: 009
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL
 Group: System Environment/Base
 URL: http://git.fedoraproject.org/?p=hosted/livecd
 Source0: %{name}-%{version}.tar.bz2
+Source1: isotostick.sh
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: util-linux
 Requires: coreutils
@@ -34,6 +35,8 @@ make
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 
+install -m 0755 %{SOURCE1} $RPM_BUILD_ROOT/%{_bindir}/livecd-iso-to-disk
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -48,6 +51,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/livecd-tools/*
 
 %changelog
+* Mon Nov  5 2007 Jeremy Katz <katzj@redhat.com> - 009-2
+- Push new livecd-iso-to-disk that works with Fedora 8 live images
+
 * Wed May 30 2007 Jeremy Katz <katzj@redhat.com> - 009-1
 - miscellaneous live config changes
 - fix isomd5 checking syntax error
