@@ -65,7 +65,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 
-* Tue Jan 29 Rahul Sundaram <sundaram@fedoraproject.org> - 013-3
+* Mon Jan 28 Rahul Sundaram <sundaram@fedoraproject.org> - 013-3
   Fix build on x86_64
 * Mon Jan 28 2008 Rahul Sundaram <sundaram@fedoraproject.org> - 013-2
 - Initial build for EPEL
