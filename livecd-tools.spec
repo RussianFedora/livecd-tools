@@ -3,7 +3,7 @@
 Summary: Tools for building live CD's
 Name: livecd-tools
 Version: 013 
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2+
 Group: System Environment/Base
 URL: http://git.fedoraproject.org/?p=hosted/livecd
@@ -57,14 +57,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/livecd-creator
 %{_bindir}/livecd-iso-to-disk
 %{_bindir}/image-creator
-%dir %{_libdir}/livecd-creator
-%{_libdir}/livecd-creator/mayflower
+%dir /usr/lib/livecd-creator
+/usr/lib/livecd-creator/mayflower
 %dir %{_datadir}/livecd-tools
 %{_datadir}/livecd-tools/*
 %{_libdir}/python?.?/site-packages/imgcreate/*
 
 %changelog
 
+* Tue Jan 29 Rahul Sundaram <sundaram@fedoraproject.org> - 013-3
+  Fix build on x86_64
 * Mon Jan 28 2008 Rahul Sundaram <sundaram@fedoraproject.org> - 013-2
 - Initial build for EPEL
 
