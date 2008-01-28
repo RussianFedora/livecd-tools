@@ -1,11 +1,16 @@
+%define debug_package %{nil}
+
 Summary: Tools for building live CD's
 Name: livecd-tools
-Version: 008
-Release: 1%{?dist}
-License: GPL
+Version: 013 
+Release: 2%{?dist}
+License: GPLv2+
 Group: System Environment/Base
 URL: http://git.fedoraproject.org/?p=hosted/livecd
 Source0: %{name}-%{version}.tar.bz2
+#Source0: livecd.tar.bz2
+Patch0: imgcreate-old-pykickstart.patch
+Patch1: imgcreate-try-finally.patch      
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: util-linux
 Requires: coreutils
@@ -14,10 +19,17 @@ Requires: yum >= 3.0.0
 Requires: mkisofs
 Requires: squashfs-tools
 Requires: pykickstart
+#Requires: dosfstools >= 2.11-8
+Requires: dosfstools 
+#Requires: isomd5sum
+Requires: anaconda-runtime
+%ifarch %{ix86} x86_64
 Requires: syslinux
-Requires: dosfstools >= 2.11-8
-BuildArch: noarch
-ExcludeArch: ppc ppc64
+%endif
+%ifarch ppc ppc64
+Requires: yaboot
+%endif
+
 
 %description 
 Tools for generating live CD's on Fedora based systems including
@@ -26,6 +38,8 @@ http://fedoraproject.org/wiki/FedoraLiveCD for more details.
 
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
 
 %build
 make
@@ -42,55 +56,24 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING README HACKING
 %{_bindir}/livecd-creator
 %{_bindir}/livecd-iso-to-disk
-%dir /usr/lib/livecd-creator
-/usr/lib/livecd-creator/mayflower
+%{_bindir}/image-creator
+%dir %{_libdir}/livecd-creator
+%{_libdir}/livecd-creator/mayflower
 %dir %{_datadir}/livecd-tools
 %{_datadir}/livecd-tools/*
+%{_libdir}/python?.?/site-packages/imgcreate/*
 
 %changelog
-* Fri May  4 2007 Jeremy Katz <katzj@redhat.com> - 008-1
-- disable screensaver with default config
-- add aic7xxx and sym53c8xx drivers to default initramfs
-- fixes from johnp for FC6 support in the creator
-- fix iso-to-stick to work on FC6
 
-* Tue Apr 24 2007 Jeremy Katz <katzj@redhat.com> - 007-1
-- Disable prelinking by default
-- Disable some things that slow down the live boot substantially
-- Lots of tweaks to the default package manifests
-- Allow setting the root password (Jeroen van Meeuwen)
-- Allow more specific network line setting (Mark McLoughlin)
-- Don't pollute the host yum cache (Mark McLoughlin)
-- Add support for mediachecking
+* Mon Jan 28 2008 Rahul Sundaram <sundaram@fedoraproject.org> - 013-2
+- Initial build for EPEL
 
-* Wed Apr  4 2007 Jeremy Katz <katzj@redhat.com> - 006-1
-- Many fixes to error handling from Mark McLoughlin
-- Add the KDE config
-- Add support for prelinking
-- Fixes for installing when running from RAM or usb stick
-- Add sanity checking to better ensure that USB stick is bootable
+* Mon Oct 29 2007 Jeremy Katz <katzj@redhat.com> - 013-1
+- Lots of config updates
+- Support 'device foo' to say what modules go in the initramfs
+- Support multiple kernels being installed
+- Allow blacklisting kernel modules on boot with blacklist=foo
+- Improve bootloader configs
+- Split configs off for f8
 
-* Thu Mar 29 2007 Jeremy Katz <katzj@redhat.com> - 005-3
-- have to use excludearch, not exclusivearch
-
-* Thu Mar 29 2007 Jeremy Katz <katzj@redhat.com> - 005-2
-- exclusivearch since it only works on x86 and x86_64 for now
-
-* Wed Mar 28 2007 Jeremy Katz <katzj@redhat.com> - 005-1
-- some shell quoting fixes
-- allow using UUID or LABEL for the fs label of a usb stick
-- work with ext2 formated usb stick
-
-* Mon Mar 26 2007 Jeremy Katz <katzj@redhat.com> - 004-1
-- add livecd-iso-to-disk for setting up the live CD iso image onto a usb 
-  stick or similar
-
-* Fri Mar 23 2007 Jeremy Katz <katzj@redhat.com> - 003-1
-- fix remaining reference to run-init
-
-* Thu Mar 22 2007 Jeremy Katz <katzj@redhat.com> - 002-1
-- update for new version
-
-* Fri Dec 22 2006 David Zeuthen <davidz@redhat.com> - 001-1%{?dist}
-- Initial build.
 

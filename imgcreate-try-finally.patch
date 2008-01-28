@@ -1,0 +1,125 @@
+Don't use try/except/finally - not supported before python 2.5
+
+The construct:
+
+    try:
+        do_something()
+    except:
+        handle_exception()
+    finally:
+        do_cleanup()
+
+is not supported with RHEL 5.1 python, so we change to:
+
+    try:
+        try:
+            do_something()
+        except:
+            handle_exception()
+    finally:
+        do_cleanup()
+
+Signed-off-by: Mark McLoughlin <markmc@redhat.com>
+
+Index: livecd/imgcreate/creator.py
+===================================================================
+--- livecd.orig/imgcreate/creator.py	2008-01-08 09:42:55.000000000 +0000
++++ livecd/imgcreate/creator.py	2008-01-08 09:50:31.000000000 +0000
+@@ -553,14 +553,15 @@
+             rpm.addMacro("_excludedocs", "1")
+ 
+         try:
+-            self.__select_packages(ayum)
+-            self.__select_groups(ayum)
+-            self.__deselect_packages(ayum)
+-            ayum.runInstall()
+-        except yum.Errors.RepoError, e:
+-            raise CreatorError("Unable to download from repo : %s" % (e,))
+-        except yum.Errors.YumBaseError, e:
+-            raise CreatorError("Unable to install: %s" % (e,))
++            try:
++                self.__select_packages(ayum)
++                self.__select_groups(ayum)
++                self.__deselect_packages(ayum)
++                ayum.runInstall()
++            except yum.Errors.RepoError, e:
++                raise CreatorError("Unable to download from repo : %s" % (e,))
++            except yum.Errors.YumBaseError, e:
++                raise CreatorError("Unable to install: %s" % (e,))
+         finally:
+             ayum.closeRpmDB()
+             ayum.close()
+@@ -595,11 +596,12 @@
+                 script = "/tmp/" + os.path.basename(path)
+ 
+             try:
+-                subprocess.call([s.interp, script],
+-                                preexec_fn = preexec, env = env)
+-            except OSError, (err, msg):
+-                raise CreatorError("Failed to execute %%post script "
+-                                   "with '%s' : %s" % (s.interp, msg))
++                try:
++                    subprocess.call([s.interp, script],
++                                    preexec_fn = preexec, env = env)
++                except OSError, (err, msg):
++                    raise CreatorError("Failed to execute %%post script "
++                                       "with '%s' : %s" % (s.interp, msg))
+             finally:
+                 os.unlink(path)
+ 
+Index: livecd/tools/image-creator
+===================================================================
+--- livecd.orig/tools/image-creator	2007-12-11 11:22:17.000000000 +0000
++++ livecd/tools/image-creator	2008-01-08 09:51:01.000000000 +0000
+@@ -59,10 +59,11 @@
+     creator = imgcreate.LoopImageCreator(ks, name)
+ 
+     try:
+-        creator.create()
+-    except imgcreate.CreatorError, e:
+-        print >> sys.stderr, "Error creating image : %s" % e
+-        return 1
++        try:
++            creator.create()
++        except imgcreate.CreatorError, e:
++            print >> sys.stderr, "Error creating image : %s" % e
++            return 1
+     finally:
+         creator.cleanup()
+ 
+Index: livecd/tools/livecd-creator
+===================================================================
+--- livecd.orig/tools/livecd-creator	2007-12-11 11:22:17.000000000 +0000
++++ livecd/tools/livecd-creator	2008-01-08 09:51:35.000000000 +0000
+@@ -111,18 +111,19 @@
+     creator.skip_minimize = options.skip_minimize
+ 
+     try:
+-        creator.mount(options.base_on, options.cachedir)
+-        creator.install()
+-        creator.configure()
+-        if options.give_shell:
+-            print "Launching shell. Exit to continue."
+-            print "----------------------------------"
+-            creator.launch_shell()
+-        creator.unmount()
+-        creator.package()
+-    except imgcreate.CreatorError, e:
+-        print >> sys.stderr, "Error creating Live CD : %s" % e
+-        return 1
++        try:
++            creator.mount(options.base_on, options.cachedir)
++            creator.install()
++            creator.configure()
++            if options.give_shell:
++                print "Launching shell. Exit to continue."
++                print "----------------------------------"
++                creator.launch_shell()
++            creator.unmount()
++            creator.package()
++        except imgcreate.CreatorError, e:
++            print >> sys.stderr, "Error creating Live CD : %s" % e
++            return 1
+     finally:
+         creator.cleanup()
+ 
