@@ -1,5 +1,5 @@
 %define debug_package %{nil}
-
+%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 Summary: Tools for building live CD's
 Name: livecd-tools
 Version: 013 
@@ -61,15 +61,16 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/livecd-creator/mayflower
 %dir %{_datadir}/livecd-tools
 %{_datadir}/livecd-tools/*
-%{_libdir}/python?.?/site-packages/imgcreate/*
+%{python_sitelib}/imgcreate/*
 
 %changelog
 
+* Tue Jan 29 2008 Rahul Sundaram <sundaram@fedoraproject.org> - 013-4
+- Use python sitelib macro properly
 * Tue Jan 29 2008 Rahul Sundaram <sundaram@fedoraproject.org> - 013-3
-  Fix build on x86_64
+- Fix build on x86_64
 * Mon Jan 28 2008 Rahul Sundaram <sundaram@fedoraproject.org> - 013-2
 - Initial build for EPEL
-
 * Mon Oct 29 2007 Jeremy Katz <katzj@redhat.com> - 013-1
 - Lots of config updates
 - Support 'device foo' to say what modules go in the initramfs
