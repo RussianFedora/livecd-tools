@@ -1,0 +1,11 @@
+--- livecd/tools.orig/livecd-iso-to-disk.sh	2008-01-29 14:40:58.000000000 +0530
++++ livecd/tools/livecd-iso-to-disk.sh	2008-01-29 14:42:09.000000000 +0530
+@@ -176,7 +176,7 @@
+ if [ -z "$noverify" ]; then
+     # verify the image
+     echo "Verifying image..."
+-    checkisomd5 --verbose $ISO
++    /usr/lib/anaconda-runtime/checkisomd5 --verbose $ISO
+     if [ $? -ne 0 ]; then
+ 	echo "Are you SURE you want to continue?"
+ 	echo "Press Enter to continue or ctrl-c to abort"
