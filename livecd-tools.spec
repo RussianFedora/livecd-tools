@@ -1,5 +1,6 @@
 %define debug_package %{nil}
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+
 Summary: Tools for building live CD's
 Name: livecd-tools
 Version: 013 
@@ -10,7 +11,8 @@ URL: http://git.fedoraproject.org/?p=hosted/livecd
 Source0: %{name}-%{version}.tar.bz2
 #Source0: livecd.tar.bz2
 Patch0: imgcreate-old-pykickstart.patch
-Patch1: imgcreate-try-finally.patch      
+Patch1: imgcreate-try-finally.patch
+Patch2: livecd-iso-to-disk-path.patch      
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: util-linux
 Requires: coreutils
@@ -40,6 +42,7 @@ http://fedoraproject.org/wiki/FedoraLiveCD for more details.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 make
@@ -66,9 +69,9 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 
 * Tue Jan 29 2008 Rahul Sundaram <sundaram@fedoraproject.org> - 013-4
-- Use python sitelib macro properly
+  Patch livecd-iso-to-disk for checkisomd5 location
 * Tue Jan 29 2008 Rahul Sundaram <sundaram@fedoraproject.org> - 013-3
-- Fix build on x86_64
+  Fix build on x86_64
 * Mon Jan 28 2008 Rahul Sundaram <sundaram@fedoraproject.org> - 013-2
 - Initial build for EPEL
 * Mon Oct 29 2007 Jeremy Katz <katzj@redhat.com> - 013-1
