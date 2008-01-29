@@ -4,7 +4,7 @@
 Summary: Tools for building live CD's
 Name: livecd-tools
 Version: 013 
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2+
 Group: System Environment/Base
 URL: http://git.fedoraproject.org/?p=hosted/livecd
@@ -68,8 +68,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 
-* Tue Jan 29 2008 Rahul Sundaram <sundaram@fedoraproject.org> - 013-4
+* Tue Jan 29 2008 Rahul Sundaram <sundaram@fedoraproject.org> - 013-5
   Patch livecd-iso-to-disk for checkisomd5 location
+* Tue Jan 29 2008 Rahul Sundaram <sundaram@fedoraproject.org> - 013-4
+- Use python sitelib macro properly
 * Tue Jan 29 2008 Rahul Sundaram <sundaram@fedoraproject.org> - 013-3
   Fix build on x86_64
 * Mon Jan 28 2008 Rahul Sundaram <sundaram@fedoraproject.org> - 013-2
