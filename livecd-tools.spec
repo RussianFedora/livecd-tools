@@ -1,10 +1,12 @@
+%{!?python_sitelib: %define python_sitelib %(%{__python} -c "import distutils.sysconfig as d; print d.get_python_lib()")}
+
 %define debug_package %{nil}
 
 Summary: Tools for building live CD's
 Name: livecd-tools
-Version: 012
+Version: 014
 Release: 1%{?dist}
-License: GPL
+License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedoraproject.org/?p=hosted/livecd
 Source0: %{name}-%{version}.tar.bz2
@@ -12,10 +14,10 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: util-linux
 Requires: coreutils
 Requires: e2fsprogs
-Requires: yum >= 3.0.0
+Requires: yum >= 3.1.7
 Requires: mkisofs
 Requires: squashfs-tools
-Requires: pykickstart
+Requires: pykickstart >= 0.96
 Requires: dosfstools >= 2.11-8
 Requires: isomd5sum
 %ifarch %{ix86} x86_64
@@ -24,6 +26,7 @@ Requires: syslinux
 %ifarch ppc ppc64
 Requires: yaboot
 %endif
+BuildRequires: python
 
 
 %description 
@@ -53,8 +56,30 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/livecd-creator/mayflower
 %dir %{_datadir}/livecd-tools
 %{_datadir}/livecd-tools/*
+%{_bindir}/image-creator
+%dir %{python_sitelib}/imgcreate
+%{python_sitelib}/imgcreate/*.py
+%{python_sitelib}/imgcreate/*.pyo
+%{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Tue Feb 12 2008 Jeremy Katz <katzj@redhat.com> - 014-1
+- Rework to provide a python API for use by other tools (thanks to 
+  markmc for a lot of the legwork here)
+- Fix creation of images with ext2 filesystems and no SELinux
+- Don't require a yum-cache directory inside of the cachedir (#430066)
+- Many config updates for rawhide
+- Allow running live images from MMC/SD (#430444)
+- Don't let a non-standard TMPDIR break things (Jim Meyering)
+
+* Mon Oct 29 2007 Jeremy Katz <katzj@redhat.com> - 013-1
+- Lots of config updates
+- Support 'device foo' to say what modules go in the initramfs
+- Support multiple kernels being installed
+- Allow blacklisting kernel modules on boot with blacklist=foo
+- Improve bootloader configs
+- Split configs off for f8
+
 * Tue Sep 25 2007 Jeremy Katz <katzj@redhat.com> - 012-1
 - Allow %%post --nochroot to work for putting files in the root of the iso
 - Set environment variables for when %%post is run
