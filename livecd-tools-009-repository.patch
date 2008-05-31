@@ -1,0 +1,72 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for livecd-tools = 009 to set the correct default
+paths for the repositories, as Fedora 7 was the first merged release without Core and Extras.
+
+--- livecd-tools-009/config/livecd-fedora-desktop.ks		2007-05-30 22:12:54.000000000 +0200
++++ livecd-tools-009/config/livecd-fedora-desktop.ks.repository	2008-05-31 10:13:53.000000000 +0200
+@@ -4,8 +4,8 @@
+ auth --useshadow --enablemd5
+ selinux --enforcing
+ firewall --disabled
+-repo --name=d7 --baseurl=http://download.fedora.redhat.com/pub/fedora/linux/core/development/i386/os
+-repo --name=e7 --baseurl=http://download.fedora.redhat.com/pub/fedora/linux/extras/development/i386
++repo --name=released --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-7&arch=i386
++repo --name=updates --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f7&arch=i386
+ xconfig --startxonboot
+ services --enabled=NetworkManager,dhcdbd --disabled=network,sshd
+ 
+@@ -33,9 +33,8 @@
+ -scim-bridge-qt
+ -scim-skk
+ -scim-tomoe
+--scim-tables-chinese
++-scim-tables*
+ -scim-fcitx*
+--scim-tables-additional
+ -scim-skk
+ 
+ m17n-lib
+--- livecd-tools-009/config/livecd-fedora-kde.ks		2007-05-30 22:12:54.000000000 +0200
++++ livecd-tools-009/config/livecd-fedora-kde.ks.repository	2008-05-31 10:18:56.000000000 +0200
+@@ -8,8 +8,8 @@
+ xconfig --startxonboot
+ services --enabled=NetworkManager,dhcdbd --disabled=network,sshd
+ 
+-repo --name=d7 --baseurl=http://download.fedora.redhat.com/pub/fedora/linux/core/development/i386/os
+-repo --name=e7 --baseurl=http://download.fedora.redhat.com/pub/fedora/linux/extras/development/i386
++repo --name=released --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-7&arch=i386
++repo --name=updates --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f7&arch=i386
+ 
+ %packages
+ # Basic packages
+--- livecd-tools-009/config/livecd-fedora-minimal.ks		2007-05-30 22:12:54.000000000 +0200
++++ livecd-tools-009/config/livecd-fedora-minimal.ks.repository	2008-05-31 10:19:10.000000000 +0200
+@@ -5,14 +5,8 @@
+ selinux --enforcing
+ firewall --disabled
+ 
+-# TODO: how to replace i386 with $basearch
+-
+-# TODO: apparently calling it fedora-dev instead of a-dev makes things
+-# not work. Perhaps it has something to do with the default repos in
+-# /etc/yum.repos.d not getting properly disabled?
+-
+-repo --name=a-dev --baseurl=http://download.fedora.redhat.com/pub/fedora/linux/core/development/i386/os
+-repo --name=a-extras-dev --baseurl=http://download.fedora.redhat.com/pub/fedora/linux/extras/development/i386
++repo --name=released --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-7&arch=$basearch
++repo --name=updates --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f7&arch=$basearch
+ 
+ %packages
+ bash
+--- livecd-tools-009/config/livedvd-fedora-kde.ks		2007-05-30 22:12:54.000000000 +0200
++++ livecd-tools-009/config/livedvd-fedora-kde.ks.repository	2008-05-31 10:17:51.000000000 +0200
+@@ -8,8 +8,8 @@
+ xconfig --startxonboot
+ services --enabled=NetworkManager,dhcdbd --disabled=network,sshd
+ 
+-repo --name=d7 --baseurl=http://download.fedora.redhat.com/pub/fedora/linux/core/development/i386/os
+-repo --name=e7 --baseurl=http://download.fedora.redhat.com/pub/fedora/linux/extras/development/i386
++repo --name=released --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-7&arch=$basearch
++repo --name=updates --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f7&arch=$basearch
+ 
+ %packages
+ # Basic packages

@@ -1,12 +1,13 @@
 Summary: Tools for building live CD's
 Name: livecd-tools
 Version: 009
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPL
 Group: System Environment/Base
 URL: http://git.fedoraproject.org/?p=hosted/livecd
 Source0: %{name}-%{version}.tar.bz2
 Source1: isotostick.sh
+Patch: livecd-tools-009-repository.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: util-linux
 Requires: coreutils
@@ -27,6 +28,7 @@ http://fedoraproject.org/wiki/FedoraLiveCD for more details.
 
 %prep
 %setup -q
+%patch -p1
 
 %build
 make
@@ -51,6 +53,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/livecd-tools/*
 
 %changelog
+* Sun May 31 2008 Robert Scheck <robert@fedoraproject.org> - 009-4
+- Updated outdated kickstart files (#318811, Christoph Wickert)
+
 * Mon Nov  5 2007 Jeremy Katz <katzj@redhat.com> - 009-3
 - And fix to actually work with F7
 
