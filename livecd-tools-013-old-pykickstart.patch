@@ -1,0 +1,406 @@
+Backport imgcreate to RHEL5 pykickstart
+
+RHEL5 pykickstart differs from latest Fedora pykickstart
+in quite a number of ways:
+
+  - No commands, errors or version sub-modules, but there
+    is a data sub-module
+
+  - readKickstart() doesn't support relative includes
+    very well; it only tries the paths relative to the
+    current directory rather than relative to the directory
+    the topmost kickstart is in
+
+  - Most of the parsed data is available at KsParser.ksdata
+    rather than KsParser.hander.foo
+
+  - No support for group include types (i.e. required, default,
+    all etc.)
+
+  - The contents of ksdata.groupList are a simply groups names
+    rather than Group objects
+
+  - ksdata.device has the following format:
+
+      <type> <module>[:<module>...] [--opts=<opts>]
+
+    rather than being a Device object.
+
+  - No bootloader timeout or default kernel options.
+
+  - No includepkgs/excludepkgs repo options.
+
+  - Some ksdata attributes - e.g. timezone, firewall, rootpw,
+    etc. - are dicts rather than objects
+
+Signed-off-by: Mark McLoughlin <markmc@redhat.com>
+
+Index: livecd/imgcreate/creator.py
+===================================================================
+--- livecd.orig/imgcreate/creator.py
++++ livecd/imgcreate/creator.py
+@@ -507,16 +507,16 @@ class ImageCreator(object):
+         skipped_groups = []
+         for group in kickstart.get_groups(self.ks):
+             try:
+-                ayum.selectGroup(group.name, group.include)
++                ayum.selectGroup(group)
+             except (yum.Errors.InstallError, yum.Errors.GroupsError), e:
+                 if kickstart.ignore_missing(self.ks):
+                     raise CreatorError("Failed to find group '%s' : %s" %
+-                                       (group.name, e))
++                                       (group, e))
+                 else:
+                     skipped_groups.append(group)
+ 
+         for group in skipped_groups:
+-            print >> sys.stderr, "Skipping missing group '%s'" % (group.name,)
++            print >> sys.stderr, "Skipping missing group '%s'" % (group,)
+ 
+     def __deselect_packages(self, ayum):
+         for pkg in kickstart.get_excluded(self.ks,
+@@ -540,14 +540,8 @@ class ImageCreator(object):
+         ayum = LiveCDYum()
+         ayum.setup(yum_conf, self._instroot)
+ 
+-        for repo in kickstart.get_repos(self.ks, repo_urls):
+-            (name, baseurl, mirrorlist, inc, exc) = repo
+-            
++        for (name, baseurl, mirrorlist) in kickstart.get_repos(self.ks, repo_urls):
+             yr = ayum.addRepository(name, baseurl, mirrorlist)
+-            if inc:
+-                yr.includepkgs = inc
+-            if exc:
+-                yr.exclude = exc
+ 
+         if kickstart.exclude_docs(self.ks):
+             rpm.addMacro("_excludedocs", "1")
+@@ -615,19 +609,19 @@ class ImageCreator(object):
+         creating an initrd and bootloader configuration.
+ 
+         """
+-        ksh = self.ks.handler
++        ksd = self.ks.ksdata
+ 
+-        kickstart.LanguageConfig(self._instroot).apply(ksh.lang)
+-        kickstart.KeyboardConfig(self._instroot).apply(ksh.keyboard)
+-        kickstart.TimezoneConfig(self._instroot).apply(ksh.timezone)
+-        kickstart.AuthConfig(self._instroot).apply(ksh.authconfig)
+-        kickstart.FirewallConfig(self._instroot).apply(ksh.firewall)
+-        kickstart.SelinuxConfig(self._instroot).apply(ksh.selinux)
+-        kickstart.RootPasswordConfig(self._instroot).apply(ksh.rootpw)
+-        kickstart.ServicesConfig(self._instroot).apply(ksh.services)
+-        kickstart.XConfig(self._instroot).apply(ksh.xconfig)
+-        kickstart.NetworkConfig(self._instroot).apply(ksh.network)
+-        kickstart.SelinuxConfig(self._instroot).apply(ksh.selinux)
++        kickstart.LanguageConfig(self._instroot).apply(ksd.lang)
++        kickstart.KeyboardConfig(self._instroot).apply(ksd.keyboard)
++        kickstart.TimezoneConfig(self._instroot).apply(ksd.timezone)
++        kickstart.AuthConfig(self._instroot).apply(ksd.authconfig)
++        kickstart.FirewallConfig(self._instroot).apply(ksd.firewall)
++        kickstart.SelinuxConfig(self._instroot).apply(ksd.selinux)
++        kickstart.RootPasswordConfig(self._instroot).apply(ksd.rootpw)
++        kickstart.ServicesConfig(self._instroot).apply(ksd.services)
++        kickstart.XConfig(self._instroot).apply(ksd.xconfig)
++        kickstart.NetworkConfig(self._instroot).apply(ksd.network)
++        kickstart.SelinuxConfig(self._instroot).apply(ksd.selinux)
+ 
+         self._create_bootconfig()
+ 
+Index: livecd/imgcreate/kickstart.py
+===================================================================
+--- livecd.orig/imgcreate/kickstart.py
++++ livecd/imgcreate/kickstart.py
+@@ -21,11 +21,9 @@ import os.path
+ import subprocess
+ import time
+ 
+-import pykickstart.commands as kscommands
+ import pykickstart.constants as ksconstants
+-import pykickstart.errors as kserrors
++import pykickstart.data as ksdata
+ import pykickstart.parser as ksparser
+-import pykickstart.version as ksversion
+ 
+ import imgcreate.errors as errors
+ import imgcreate.fs as fs
+@@ -40,16 +38,29 @@ def read_kickstart(path):
+     If an error occurs, a CreatorError exception is thrown.
+ 
+     """
+-    version = ksversion.makeVersion()
+-    ks = ksparser.KickstartParser(version)
++    data = ksdata.KickstartData()
++    ks = ksparser.KickstartParser(data, ksparser.KickstartHandlers(data))
++
++    #
++    # We change dirs to the dirname of the kickstart file so
++    # that %include can use relative paths. This is fixed in
++    # pykickstart itself in later versions
++    #
++    cwd = os.getcwd()
++    (dirname, basename) = os.path.split(os.path.abspath(path))
++    os.chdir(dirname)
+     try:
+-        ks.readKickstart(path)
+-    except IOError, (err, msg):
+-        raise errors.KickstartError("Failed to read kickstart file "
+-                                    "'%s' : %s" % (path, msg))
+-    except kserrors.KickstartError, e:
+-        raise errors.KickstartError("Failed to parse kickstart file "
+-                                    "'%s' : %s" % (path, e))
++        try:
++            ks.readKickstart(basename)
++        except IOError, (err, msg):
++            raise errors.KickstartError("Failed to read kickstart file "
++                                        "'%s' : %s" % (path, msg))
++        except ksparser.KickstartError, e:
++            raise errors.KickstartError("Failed to parse kickstart file "
++                                        "'%s' : %s" % (path, e))
++    finally:
++        os.chdir(cwd)
++
+     return ks
+ 
+ def build_name(kscfg, prefix = None, suffix = None, maxlen = None):
+@@ -115,7 +126,7 @@ class KickstartConfig(object):
+ class LanguageConfig(KickstartConfig):
+     """A class to apply a kickstart language configuration to a system."""
+     def apply(self, kslang):
+-        lang = kslang.lang or "en_US.UTF-8"
++        lang = kslang or "en_US.UTF-8"
+ 
+         f = open(self.path("/etc/sysconfig/i18n"), "w+")
+         f.write("LANG=\"" + lang + "\"\n")
+@@ -131,15 +142,15 @@ class KeyboardConfig(KickstartConfig):
+         #
+         import rhpl.keyboard
+         k = rhpl.keyboard.Keyboard()
+-        if kskeyboard.keyboard:
+-            k.set(kskeyboard.keyboard)
++        if kskeyboard:
++            k.set(kskeyboard)
+         k.write(self.instroot)
+ 
+ class TimezoneConfig(KickstartConfig):
+     """A class to apply a kickstart timezone configuration to a system."""
+     def apply(self, kstimezone):
+-        tz = kstimezone.timezone or "America/New_York"
+-        utc = str(kstimezone.isUtc)
++        tz = kstimezone["timezone"] or "America/New_York"
++        utc = str(kstimezone["isUtc"])
+ 
+         f = open(self.path("/etc/sysconfig/clock"), "w+")
+         f.write("ZONE=\"" + tz + "\"\n")
+@@ -152,7 +163,7 @@ class AuthConfig(KickstartConfig):
+         if not os.path.exists(self.path("/usr/sbin/authconfig")):
+             return
+ 
+-        auth = ksauthconfig.authconfig or "--useshadow --enablemd5"
++        auth = ksauthconfig or "--useshadow --enablemd5"
+         args = ["/usr/sbin/authconfig", "--update", "--nostart"]
+         self.call(args + auth.split())
+ 
+@@ -162,7 +173,7 @@ class FirewallConfig(KickstartConfig):
+         #
+         # FIXME: should handle the rest of the options
+         #
+-        if not ksfirewall.enabled:
++        if not ksfirewall["enabled"]:
+             return
+         if not os.path.exists(self.path("/usr/sbin/lokkit")):
+             return
+@@ -188,10 +199,10 @@ class RootPasswordConfig(KickstartConfig
+         p2.communicate()
+ 
+     def apply(self, ksrootpw):
+-        if ksrootpw.isCrypted:
+-            self.set_encrypted(ksrootpw.password)
+-        elif ksrootpw.password != "":
+-            self.set_unencrypted(ksrootpw.password)
++        if ksrootpw["isCrypted"]:
++            self.set_encrypted(ksrootpw["password"])
++        elif ksrootpw["password"] != "":
++            self.set_unencrypted(ksrootpw["password"])
+         else:
+             self.unset()
+ 
+@@ -200,15 +211,15 @@ class ServicesConfig(KickstartConfig):
+     def apply(self, ksservices):
+         if not os.path.exists(self.path("/sbin/chkconfig")):
+             return
+-        for s in ksservices.enabled:
++        for s in ksservices["enabled"]:
+             self.call(["/sbin/chkconfig", s, "on"])
+-        for s in ksservices.disabled:
++        for s in ksservices["disabled"]:
+             self.call(["/sbin/chkconfig", s, "off"])
+ 
+ class XConfig(KickstartConfig):
+     """A class to apply a kickstart X configuration to a system."""
+     def apply(self, ksxconfig):
+-        if not ksxconfig.startX:
++        if not ksxconfig["startX"]:
+             return
+         f = open(self.path("/etc/inittab"), "rw+")
+         buf = f.read()
+@@ -329,7 +340,7 @@ class NetworkConfig(KickstartConfig):
+         gateway = None
+         nameservers = None
+ 
+-        for network in ksnet.network:
++        for network in ksnet:
+             if not network.device:
+                 raise errros.KickstartError("No --device specified with "
+                                             "network kickstart command")
+@@ -370,7 +381,7 @@ class SelinuxConfig(KickstartConfig):
+             f = file(path, "w+")
+             os.chmod(path, 0644)
+ 
+-        if not ksselinux.selinux:
++        if not ksselinux:
+             return
+         if not os.path.exists(self.path("/sbin/restorecon")):
+             return
+@@ -381,7 +392,7 @@ class SelinuxConfig(KickstartConfig):
+         if os.path.exists(self.path("/usr/sbin/lokkit")):
+             args = ["/usr/sbin/lokkit", "-f", "--quiet", "--nostart"]
+ 
+-            if ksselinux.selinux:
++            if ksselinux:
+                 args.append("--selinux=enforcing")
+             else:
+                 args.append("--selinux=disabled")
+@@ -391,51 +402,35 @@ class SelinuxConfig(KickstartConfig):
+         self.relabel(ksselinux)
+ 
+ def get_image_size(ks, default = None):
+-    for p in ks.handler.partition.partitions:
++    for p in ks.ksdata.partitions:
+         if p.mountpoint == "/" and p.size:
+             return int(p.size) * 1024L * 1024L
+     return default
+ 
+ def get_modules(ks):
+-    devices = []
+-    if isinstance(ks.handler.device, kscommands.device.FC3_Device):
+-        devices.append(ks.handler.device)
+-    else:
+-        devices.extend(ks.handler.device.deviceList)
+-
+     modules = []
+-    for device in devices:
+-        if not device.moduleName:
+-            continue
+-        modules.extend(device.moduleName.split(":"))
++    try:
++        #
++        # Format with RHEL5 pykickstart appears to be:
++        #   <type> <module>[:<module>...] [--opts=<opts>]
++        #
++        modules.extend(ks.ksdata.device.split()[1].split(":"))
++    except:
++        pass
+ 
+     return modules
+ 
+ def get_timeout(ks, default = None):
+-    if not hasattr(ks.handler.bootloader, "timeout"):
+-        return default
+-    if ks.handler.bootloader.timeout is None:
+-        return default
+-    return int(ks.handler.bootloader.timeout)
++    # No equivalent with RHEL5 pykickstart
++    return default
+ 
+ def get_default_kernel(ks, default = None):
+-    if not hasattr(ks.handler.bootloader, "default"):
+-        return default
+-    if not ks.handler.bootloader.default:
+-        return default
+-    return ks.handler.bootloader.default
++    # No equivalent with RHEL5 pykickstart
++    return default
+ 
+ def get_repos(ks, repo_urls = {}):
+     repos = []
+-    for repo in ks.handler.repo.repoList:
+-        inc = []
+-        if hasattr(repo, "includepkgs"):
+-            inc.extend(repo.includepkgs)
+-
+-        exc = []
+-        if hasattr(repo, "excludepkgs"):
+-            exc.extend(repo.excludepkgs)
+-
++    for repo in ks.ksdata.repoList:
+         baseurl = repo.baseurl
+         mirrorlist = repo.mirrorlist
+         
+@@ -443,38 +438,36 @@ def get_repos(ks, repo_urls = {}):
+             baseurl = repo_urls[repo.name]
+             mirrorlist = None
+ 
+-        repos.append((repo.name, baseurl, mirrorlist, inc, exc))
++        repos.append((repo.name, baseurl, mirrorlist))
+ 
+     return repos
+ 
+ def convert_method_to_repo(ks):
+-    try:
+-        ks.handler.repo.methodToRepo()
+-    except (AttributeError, kserrors.KickstartError):
+-        pass
++    # No equivalent with RHEL5 pykickstart
++    pass
+ 
+ def get_packages(ks, required = []):
+-    return ks.handler.packages.packageList + required
++    return ks.ksdata.packageList + required
+ 
+ def get_groups(ks, required = []):
+-    return ks.handler.packages.groupList + required
++    return ks.ksdata.groupList + required
+ 
+ def get_excluded(ks, required = []):
+-    return ks.handler.packages.excludedList + required
++    return ks.ksdata.excludedList + required
+ 
+ def ignore_missing(ks):
+-    return ks.handler.packages.handleMissing == ksconstants.KS_MISSING_IGNORE
++    return ks.ksdata.handleMissing == ksconstants.KS_MISSING_IGNORE
+ 
+ def exclude_docs(ks):
+-    return ks.handler.packages.excludeDocs
++    return ks.ksdata.excludeDocs
+ 
+ def get_post_scripts(ks):
+     scripts = []
+-    for s in ks.handler.scripts:
++    for s in ks.ksdata.scripts:
+         if s.type != ksparser.KS_SCRIPT_POST:
+             continue
+         scripts.append(s)
+     return scripts
+ 
+ def selinux_enabled(ks):
+-    return ks.handler.selinux.selinux
++    return ks.ksdata.selinux
+Index: livecd/imgcreate/yuminst.py
+===================================================================
+--- livecd.orig/imgcreate/yuminst.py
++++ livecd/imgcreate/yuminst.py
+@@ -104,12 +104,8 @@ class LiveCDYum(yum.YumBase):
+         else:
+             print >> sys.stderr, "No such package %s to remove" %(pkg,)
+ 
+-    def selectGroup(self, grp, include = pykickstart.parser.GROUP_DEFAULT):
++    def selectGroup(self, grp):
+         yum.YumBase.selectGroup(self, grp)
+-        if include == pykickstart.parser.GROUP_REQUIRED:
+-            map(lambda p: self.deselectPackage(p), grp.default_packages.keys())
+-        elif include == pykickstart.parser.GROUP_ALL:
+-            map(lambda p: self.selectPackage(p), grp.optional_packages.keys())
+ 
+     def addRepository(self, name, url = None, mirrorlist = None):
+         def _varSubstitute(option):
