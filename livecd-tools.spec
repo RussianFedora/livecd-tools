@@ -4,7 +4,7 @@
 Summary: Tools for building live CD's
 Name: livecd-tools
 Version: 013 
-Release: 8%{?dist}
+Release: 8%{?dist}.1
 License: GPLv2+
 Group: System Environment/Base
 URL: http://git.fedoraproject.org/?p=hosted/livecd
@@ -14,6 +14,7 @@ Patch0: livecd-tools-013-old-pykickstart.patch
 Patch1: livecd-tools-013-try-finally.patch
 Patch2: livecd-tools-013-iso-to-disk-path.patch      
 Patch3: livecd-tools-013-ksconfigs.patch      
+Patch4: livecd-tools-013-extlinux-i.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: util-linux
 Requires: coreutils
@@ -45,6 +46,7 @@ http://fedoraproject.org/wiki/FedoraLiveCD for more details.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 make
@@ -69,6 +71,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*
 
 %changelog
+* Mon Oct 27 2008 Lubomir Rintel <lkundrak@v3.sk> - 013-8.1
+- Fix invocation of extlinux
+
 * Sun Aug 03 2008 Jeroen van Meeuwen <kanarip@fedoraproject.org> - 013-8
 - Fix ksconfigs, fix building and naming of patches
 

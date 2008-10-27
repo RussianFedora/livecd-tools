@@ -1,0 +1,23 @@
+Call older extlinux correctly.
+
+Lubomir Rintel <lkundrak@v3.sk>
+
+diff -up livecd-tools-013/tools/livecd-iso-to-disk.sh.extlinux-i livecd-tools-013/tools/livecd-iso-to-disk.sh
+--- livecd-tools-013/tools/livecd-iso-to-disk.sh.extlinux-i	2008-10-27 12:29:08.000000000 +0100
++++ livecd-tools-013/tools/livecd-iso-to-disk.sh	2008-10-27 12:29:14.000000000 +0100
+@@ -241,10 +241,14 @@ if [ "$USBFS" = "vfat" -o "$USBFS" = "ms
+ 	syslinux $USBDEV
+     fi
+ elif [ "$USBFS" = "ext2" -o "$USBFS" = "ext3" ]; then
++    # check if extlinux accepts -i option
++    extlinux -i -h 2>/dev/null
++    [ $? = 64 ] && I= || I=-i
++
+     # extlinux expects the config to be named extlinux.conf
+     # and has to be run with the file system mounted
+     mv $USBMNT/$SYSLINUXPATH/isolinux.cfg $USBMNT/$SYSLINUXPATH/extlinux.conf
+-    extlinux -i $USBMNT/syslinux
++    extlinux $I $USBMNT/$SYSLINUXPATH
+     cleanup
+ fi
+ 
