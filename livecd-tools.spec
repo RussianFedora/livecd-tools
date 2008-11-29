@@ -5,7 +5,7 @@
 Summary: Tools for building live CD's
 Name: livecd-tools
 Version: 019
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedoraproject.org/?p=hosted/livecd
@@ -64,6 +64,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 019-2
+- Rebuild for Python 2.6
+
 * Fri Oct 10 2008 Jeremy Katz <katzj@redhat.com> - 019-1
 - livecd-iso-to-disk: Various other XO fixes
 - Cleanup rpmdb locks after package installation
