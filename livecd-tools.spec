@@ -4,7 +4,7 @@
 
 Summary: Tools for building live CD's
 Name: livecd-tools
-Version: 020
+Version: 021
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -21,6 +21,7 @@ Requires: pykickstart >= 0.96
 Requires: dosfstools >= 2.11-8
 Requires: isomd5sum
 Requires: rhpl
+Requires: python-urlgrabber
 %ifarch %{ix86} x86_64
 Requires: syslinux
 %endif
@@ -64,6 +65,21 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Mon Jan 19 2009 Jeremy Katz <katzj@redhat.com> - 021-1
+- Start of support for hybrid GPT/MBR usb sticks (Stewart Adam)
+- Fix for udev deprecated syntax (#480109)
+- Keep cache with --cache (Jan Kratochvil, #479716)
+- Use absolute path to cachedir (#479716)
+- Support UDF for large ISO spins (Bruno Wolf, #476696)
+- Improvements for encrypted /home setup (mdomsch, #475399)
+- Don't allow spaces in labels (#475834)
+- Fix --tmpdir relative path (dhuff)
+- Support ext4 rootfs
+- Fix device command version check (apevec)
+- Allow URLs for specifying the kickstart config (bkearney)
+- Fix macro name for excludedocs (bkearney)
+- Fix up --base-on (#471656)
+
 * Wed Nov 12 2008 Jeremy Katz <katzj@redhat.com> - 020-1
 - Support setting up a swap file
 - Verify integer args in livecd-iso-to-disk (#467257)
