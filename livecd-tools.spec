@@ -8,7 +8,7 @@ Version: 021
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
-URL: http://git.fedoraproject.org/?p=hosted/livecd
+URL: http://git.fedorahosted.org/git/livecd
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: util-linux
