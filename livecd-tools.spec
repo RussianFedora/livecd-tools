@@ -5,7 +5,7 @@
 Summary: Tools for building live CD's
 Name: livecd-tools
 Version: 021
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -67,6 +67,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Wed Feb 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 021-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
+
 * Mon Jan 19 2009 Jeremy Katz <katzj@redhat.com> - 021-1
 - Start of support for hybrid GPT/MBR usb sticks (Stewart Adam)
 - Fix for udev deprecated syntax (#480109)
