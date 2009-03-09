@@ -4,8 +4,8 @@
 
 Summary: Tools for building live CD's
 Name: livecd-tools
-Version: 021
-Release: 2%{?dist}
+Version: 022
+Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -67,6 +67,15 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Mon Mar  9 2009 Jeremy Katz <katzj@redhat.com> - 022-1
+- Fixes for hybird GPT/MBR usb sticks (Stewart Adam)
+- Support setting SELinux booleans (Dan Walsh)
+- Fix unicode error messages (Felix Schwarz)
+- Update man pages (Chris Curran, #484627)
+- Support syslinux under /usr/share
+- Remove some legacy support from livecd-iso-to-disk
+- Basic support for multi-image usb sticks
+
 * Wed Feb 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 021-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
