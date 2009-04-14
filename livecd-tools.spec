@@ -4,26 +4,16 @@
 
 Summary: Tools for building live CD's
 Name: livecd-tools
-Version: 022
+Version: 023
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-Requires: util-linux
-Requires: coreutils
-Requires: e2fsprogs
-Requires: yum >= 3.2.18
+Requires: python-imgcreate = %{version}-%{release}
 Requires: mkisofs
-Requires: squashfs-tools
-Requires: pykickstart >= 0.96
-Requires: dosfstools >= 2.11-8
 Requires: isomd5sum
-Requires: rhpl
-Requires: python-urlgrabber
-Requires: libselinux-python
-Requires: dbus-python
 %ifarch %{ix86} x86_64
 Requires: syslinux
 %endif
@@ -38,6 +28,26 @@ BuildRequires: /usr/bin/pod2man
 Tools for generating live CD's on Fedora based systems including
 derived distributions such as RHEL, CentOS and others. See
 http://fedoraproject.org/wiki/FedoraLiveCD for more details.
+
+%package -n python-imgcreate
+Summary: Python modules for building system images
+Group: System Environment/Base
+Requires: util-linux
+Requires: coreutils
+Requires: e2fsprogs
+Requires: yum >= 3.2.18
+Requires: squashfs-tools
+Requires: pykickstart >= 0.96
+Requires: dosfstools >= 2.11-8
+Requires: rhpl
+Requires: python-urlgrabber
+Requires: libselinux-python
+Requires: dbus-python
+
+%description -n python-imgcreate
+Python modules that can be used for building images for things
+like live image or appliances.
+
 
 %prep
 %setup -q
@@ -54,19 +64,38 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc AUTHORS COPYING README HACKING API
+%doc AUTHORS COPYING README HACKING
 %doc config/livecd-fedora-minimal.ks
 %{_mandir}/man*/*
 %{_bindir}/livecd-creator
 %{_bindir}/livecd-iso-to-disk
 %{_bindir}/livecd-iso-to-pxeboot
 %{_bindir}/image-creator
+
+%files -n python-imgcreate
+%defattr(-,root,root,-)
+%doc API
 %dir %{python_sitelib}/imgcreate
 %{python_sitelib}/imgcreate/*.py
 %{python_sitelib}/imgcreate/*.pyo
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Tue Apr 14 2009 Jeremy Katz <katzj@redhat.com> - 023-1
+- Don't prompt about overwriting when making usb stick (#491234)
+- Fix up livecd-iso-to-pxeboot for new syslinux paths
+- Fix --xo variable expansion (Alexander Boström)
+- Name of EFI partitions doesn't matter for mactel mode (Jim Radford)
+- Fix unterminated sed command (#492376)
+- Handle kernel/squashfs mismatch when making usb stick in
+  --xo mode (Alexander Boström)
+- Support all of the options for the 'firewall' kickstart directive
+- Deal with syslinux com32 api incompat when making usb sticks (#492370)
+- Add options to force fetching of repomd.xml every run (jkeating)
+- Quiet restorecon (Marc Herbert)
+- Fix traceback with syslinux disabled (#495269)
+- Split python-imgcreate module into a subpackage
+
 * Mon Mar  9 2009 Jeremy Katz <katzj@redhat.com> - 022-1
 - Fixes for hybird GPT/MBR usb sticks (Stewart Adam)
 - Support setting SELinux booleans (Dan Walsh)
@@ -116,7 +145,7 @@ rm -rf $RPM_BUILD_ROOT
 - Fix up boot from SD
 - Fix extracting boot parameters for pxe (apevec)
 - Make rpm macro information persist into the image (bkearney)
-- Support %packages --instLangs (bkearney)
+- Support %%packages --instLangs (bkearney)
 
 * Thu Aug 28 2008 Jeremy Katz <katzj@redhat.com> - 018-1
 - Use logging API for debugging messages (dhuff)
