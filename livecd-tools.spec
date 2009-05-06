@@ -4,7 +4,7 @@
 
 Summary: Tools for building live CD's
 Name: livecd-tools
-Version: 023
+Version: 024
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -81,6 +81,12 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Wed May  6 2009 Jeremy Katz <katzj@redhat.com> - 024-1
+- Fix ppc image creation (#497193, help from jwboyer)
+- Fixes for using ext[23] usb stick (wtogami)
+- Check filesystem after resizing and raise an error if there are 
+  problems (#497377)
+
 * Tue Apr 14 2009 Jeremy Katz <katzj@redhat.com> - 023-1
 - Don't prompt about overwriting when making usb stick (#491234)
 - Fix up livecd-iso-to-pxeboot for new syslinux paths
