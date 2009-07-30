@@ -4,8 +4,8 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 024
-Release: 2%{?dist}
+Version: 025
+Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -39,7 +39,7 @@ Requires: yum >= 3.2.18
 Requires: squashfs-tools
 Requires: pykickstart >= 0.96
 Requires: dosfstools >= 2.11-8
-Requires: rhpl
+Requires: system-config-keyboard >= 1.3.0
 Requires: python-urlgrabber
 Requires: libselinux-python
 Requires: dbus-python
@@ -81,6 +81,16 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Thu Jul 30 2009 Jeremy Katz <katzj@redhat.com> - 025-1
+- Bind mount /dev/shm also (#502921)
+- Update man pages (Michel Duquaine, #505742)
+- Use blkid instead of vol_id (mclasen, #506360)
+- A few livecd-iso-to-disk tweaks (Martin Dengler, Jason Farrell)
+- Another fix for SELinux being disabled (#508402)
+- Use resize2fs -M and handle resize errors better
+- Use isohybrid on the live image 
+- Use system-config-keyboard instead of rhpl
+
 * Sat Jul 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 024-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
