@@ -4,7 +4,7 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 025
+Version: 026
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -81,6 +81,11 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Mon Aug 24 2009 Jeremy Katz <katzj@redhat.com> - 026-1
+- More resize2fs -M usage
+- Work with dracut-based initramfs
+- Some error handling updates
+
 * Thu Jul 30 2009 Jeremy Katz <katzj@redhat.com> - 025-1
 - Bind mount /dev/shm also (#502921)
 - Update man pages (Michel Duquaine, #505742)
