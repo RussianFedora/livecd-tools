@@ -4,7 +4,7 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 026
+Version: 027
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -81,6 +81,10 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Thu Sep 10 2009 Warren Togami <wtogami@redhat.com> - 027-1
+- Support new dracut output filename /boot/initramfs-*
+- Fix cleanup of fake /selinux directory during teardown Bug #522224
+
 * Mon Aug 24 2009 Jeremy Katz <katzj@redhat.com> - 026-1
 - More resize2fs -M usage
 - Work with dracut-based initramfs
