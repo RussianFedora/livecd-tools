@@ -5,11 +5,12 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 027
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
 Source0: %{name}-%{version}.tar.bz2
+Patch0: livecd-tools-027-make-liveusb-work-damnit.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{version}-%{release}
 Requires: mkisofs
@@ -51,6 +52,7 @@ like live image or appliances.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 make
@@ -81,6 +83,10 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Tue Sep 15 2009 Warren Togami <wtogami@redhat.com> - 027-2
+- test patch to make LiveUSB work again, need to be sure it doesn't
+  break LiveCD before committing in the next version
+
 * Thu Sep 10 2009 Warren Togami <wtogami@redhat.com> - 027-1
 - Support new dracut output filename /boot/initramfs-*
 - Fix cleanup of fake /selinux directory during teardown Bug #522224
