@@ -4,8 +4,8 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 027
-Release: 2%{?dist}
+Version: 028
+Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -83,6 +83,10 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Wed Sep 16 2009 Warren Togami <wtogami@redhat.com> - 028-1
+- Fix LiveUSB with live images
+- Fix display of free space during livecd-iso-to-disk error (farrell)
+
 * Tue Sep 15 2009 Warren Togami <wtogami@redhat.com> - 027-2
 - test patch to make LiveUSB work again, need to be sure it doesn't
   break LiveCD before committing in the next version
