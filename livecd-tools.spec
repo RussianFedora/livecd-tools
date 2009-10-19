@@ -5,12 +5,11 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 029
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
 Source0: %{name}-%{version}.tar.bz2
-Patch0: livecd-modprobe.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{version}-%{release}
 Requires: mkisofs
@@ -52,7 +51,6 @@ like live image or appliances.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 make
@@ -83,7 +81,7 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
-* Mon Oct 19 2009 Warren Togami <wtogami@redhat.com> - 029-2
+* Mon Oct 19 2009 Warren Togami <wtogami@redhat.com> - 029-3
 - Tell dracut not to ask for LUKS passwords or activate mdraid sets
 - Silence the /etc/modprobe.conf deprecation warning
 
