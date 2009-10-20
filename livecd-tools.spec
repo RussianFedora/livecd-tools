@@ -4,8 +4,8 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 029
-Release: 3%{?dist}
+Version: 030
+Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -81,7 +81,7 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
-* Mon Oct 19 2009 Warren Togami <wtogami@redhat.com> - 029-3
+* Mon Oct 19 2009 Warren Togami <wtogami@redhat.com> - 030-1
 - Tell dracut not to ask for LUKS passwords or activate mdraid sets
 - Silence the /etc/modprobe.conf deprecation warning
 
