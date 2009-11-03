@@ -4,7 +4,7 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 030
+Version: 031
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -81,6 +81,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Tue Nov 03 2009 Warren Togami <wtogami@redhat.com> - 031-1
+- livecd-iso-to-disk capable of installing installer DVD to USB
+
 * Mon Oct 19 2009 Warren Togami <wtogami@redhat.com> - 030-1
 - Tell dracut not to ask for LUKS passwords or activate mdraid sets
 - Silence the /etc/modprobe.conf deprecation warning
