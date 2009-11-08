@@ -5,7 +5,7 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 031
-Release: 1%{?dist}
+Release: 1%{?dist}.1
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -22,6 +22,7 @@ Requires: yaboot
 %endif
 BuildRequires: python
 BuildRequires: /usr/bin/pod2man
+Patch0: 0001-Disable-iswmd-on-live-images-for-now.patch
 
 
 %description 
@@ -51,6 +52,7 @@ like live image or appliances.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 make
@@ -81,6 +83,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Sun Nov 08 2009 Jesse Keating <jkeating@redhat.com> - 031-1.1
+- Patch to disable iswmd on live images for F12 (533739)
+
 * Tue Nov 03 2009 Warren Togami <wtogami@redhat.com> - 031-1
 - livecd-iso-to-disk capable of installing installer DVD to USB
 

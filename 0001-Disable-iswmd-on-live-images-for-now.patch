@@ -1,0 +1,26 @@
+From c7b333bcf57819d8c624445dfa2074a6004b55f4 Mon Sep 17 00:00:00 2001
+From: Jesse Keating <jkeating@redhat.com>
+Date: Sun, 8 Nov 2009 13:02:01 -0800
+Subject: [PATCH] Disable iswmd on live images for now
+
+This can lead to corrupt Intel raid arrays (533739)
+---
+ imgcreate/live.py |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/imgcreate/live.py b/imgcreate/live.py
+index 78cbff7..c4d2025 100644
+--- a/imgcreate/live.py
++++ b/imgcreate/live.py
+@@ -465,7 +465,7 @@ menu hiddenrow 5
+ 
+             # tell dracut not to ask for LUKS passwords or activate mdraid sets
+             if isDracut:
+-                kern_opts = kernel_options + " rd_NO_LUKS rd_NO_MD"
++                kern_opts = kernel_options + " rd_NO_LUKS rd_NO_MD noiswmd"
+             else:
+                 kern_opts = kernel_options
+ 
+-- 
+1.6.5.2
+
