@@ -4,7 +4,7 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 031
+Version: 032
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -14,6 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{version}-%{release}
 Requires: mkisofs
 Requires: isomd5sum
+Requires: parted
 %ifarch %{ix86} x86_64
 Requires: syslinux
 %endif
@@ -81,6 +82,13 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Sat Jun 19 2010 Bruno Wolff III <bruno@wolff.to> - 032-1
+- Added support for specifying compressors
+- Add Requires for parted - Bug 605639
+- Add rd_NO_DM dracut cmdline options - Bug 589783
+- See http://git.fedorahosted.org/git/?p=livecd;a=shortlog for a list of
+  upstream commits since 031 was tagged.
+
 * Tue Nov 03 2009 Warren Togami <wtogami@redhat.com> - 031-1
 - livecd-iso-to-disk capable of installing installer DVD to USB
 
