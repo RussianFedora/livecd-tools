@@ -5,10 +5,14 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 032
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
+# To make source tar ball:
+# git clone git://git.fedorahosted.org/livecd
+# cd livecd
+# git archive --prefix livecd-tools-VERSION/ livecd-tools-VERSION | bzip2 > livecd-tools-VERSION.tar.bz2
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{version}-%{release}
@@ -82,6 +86,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Sat Jun 19 2010 Bruno Wolff III <bruno@wolff.to> - 032-2
+- Fix tar prefix and document how to make it
+
 * Sat Jun 19 2010 Bruno Wolff III <bruno@wolff.to> - 032-1
 - Added support for specifying compressors
 - Add Requires for parted - Bug 605639
