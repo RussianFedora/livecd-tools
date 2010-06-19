@@ -12,7 +12,7 @@ URL: http://git.fedorahosted.org/git/livecd
 # To make source tar ball:
 # git clone git://git.fedorahosted.org/livecd
 # cd livecd
-# git archive --prefix livecd-tools-VERSION/ livecd-tools-VERSION | bzip2 > livecd-tools-VERSION.tar.bz2
+# make dist
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{version}-%{release}
