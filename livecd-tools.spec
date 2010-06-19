@@ -5,7 +5,7 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 032
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -76,6 +76,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/livecd-iso-to-disk
 %{_bindir}/livecd-iso-to-pxeboot
 %{_bindir}/image-creator
+%{_bindir}/liveimage-mount
 
 %files -n python-imgcreate
 %defattr(-,root,root,-)
@@ -86,6 +87,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Sat Jun 19 2010 Bruno Wolff III <bruno@wolff.to> - 032-4
+- liveimage-mount is new to 023
+
 * Sat Jun 19 2010 Bruno Wolff III <bruno@wolff.to> - 032-3
 - Change the version in the Makefile
 
