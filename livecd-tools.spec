@@ -86,6 +86,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Sat Jun 19 2010 Bruno Wolff III <bruno@wolff.to> - 032-3
+- Change the version in the Makefile
+
 * Sat Jun 19 2010 Bruno Wolff III <bruno@wolff.to> - 032-2
 - Fix tar prefix and document how to make it
 
