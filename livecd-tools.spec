@@ -4,8 +4,8 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 032
-Release: 5%{?dist}
+Version: 033
+Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -87,6 +87,11 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Sat Jun 19 2010 Bruno Wolff III <bruno@wolff.to> - 033-1
+- Fix for vesa splash file change for bz 617115.
+- Use lazy umounts as a work around for bz 617844.
+- Better handling of Environment exceptions for bz 551932.
+
 * Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 032-5
 - Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 
