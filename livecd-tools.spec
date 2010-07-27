@@ -5,7 +5,7 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 033
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -14,6 +14,8 @@ URL: http://git.fedorahosted.org/git/livecd
 # cd livecd
 # make dist
 Source0: %{name}-%{version}.tar.bz2
+# Temporary patch until next livecd-tools rollup
+Patch0: gzip.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{version}-%{release}
 Requires: mkisofs
@@ -56,6 +58,7 @@ like live image or appliances.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 make
@@ -87,6 +90,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Tue Jul 27 2010 Bruno Wolff III <bruno@wolff.to> - 033-2
+- Replace 'zlib' with 'gzip' to fix thinko about the compressor name.
+
 * Tue Jul 27 2010 Bruno Wolff III <bruno@wolff.to> - 033-1
 - Fix for vesa splash file change for bz 617115.
 - Use lazy umounts as a work around for bz 617844.
