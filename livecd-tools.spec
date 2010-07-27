@@ -87,7 +87,7 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
-* Sat Jun 19 2010 Bruno Wolff III <bruno@wolff.to> - 033-1
+* Tue Jul 27 2010 Bruno Wolff III <bruno@wolff.to> - 033-1
 - Fix for vesa splash file change for bz 617115.
 - Use lazy umounts as a work around for bz 617844.
 - Better handling of Environment exceptions for bz 551932.
