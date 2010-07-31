@@ -5,7 +5,7 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 033
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -90,6 +90,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Tue Jul 30 2010 Bruno Wolff III <bruno@wolff.to> - 033-3
+- The previous update got replaced by the python update; another bump is needed.
+
 * Tue Jul 27 2010 Bruno Wolff III <bruno@wolff.to> - 033-2
 - Replace 'zlib' with 'gzip' to fix thinko about the compressor name.
 
