@@ -1,0 +1,58 @@
+diff --git a/docs/livecd-creator.pod b/docs/livecd-creator.pod
+index 880ae19..e80a119 100644
+--- a/docs/livecd-creator.pod
++++ b/docs/livecd-creator.pod
+@@ -42,8 +42,8 @@ Defines the file system label. The default is based on the configuration name.
+ 
+ =item --compression-type=COMPRESSOR
+ 
+-Specify a compressor recognized by mksquashfs. The default is zlib. lzma
+-currently requires a custom kernel to produce a functional image. If zlib
++Specify a compressor recognized by mksquashfs. The default is gzip. lzma
++currently requires a custom kernel to produce a functional image. If gzip
+ is used, the -comp option is not passed to mksquashfs to allow the use of
+ older versions of mksquashfs.
+ 
+diff --git a/imgcreate/fs.py b/imgcreate/fs.py
+index c5cd18b..554d1b9 100644
+--- a/imgcreate/fs.py
++++ b/imgcreate/fs.py
+@@ -41,8 +41,8 @@ def makedirs(dirname):
+             raise
+ 
+ def mksquashfs(in_img, out_img, compress_type):
+-# Allow zlib to work for older versions of mksquashfs
+-    if compress_type == "zlib":
++# Allow gzip to work for older versions of mksquashfs
++    if compress_type == "gzip":
+         args = ["/sbin/mksquashfs", in_img, out_img]
+     else:
+         args = ["/sbin/mksquashfs", in_img, out_img, "-comp", compress_type]
+diff --git a/imgcreate/live.py b/imgcreate/live.py
+index 36fef63..f349a1f 100644
+--- a/imgcreate/live.py
++++ b/imgcreate/live.py
+@@ -46,7 +46,7 @@ class LiveImageCreatorBase(LoopImageCreator):
+         """
+         LoopImageCreator.__init__(self, *args)
+ 
+-        self.compress_type = "zlib"
++        self.compress_type = "gzip"
+         """mksquashfs compressor to use."""
+ 
+         self.skip_compression = False
+diff --git a/tools/livecd-creator b/tools/livecd-creator
+index 79fc944..d1727c5 100755
+--- a/tools/livecd-creator
++++ b/tools/livecd-creator
+@@ -42,8 +42,8 @@ def parse_options(args):
+     imgopt.add_option("-f", "--fslabel", type="string", dest="fs_label",
+                       help="File system label (default based on config name)")
+     imgopt.add_option("", "--compression-type", type="string", dest="compress_type",
+-                      help="Compression type recognized by mksquashfs (default zlib, lzma needs custom kernel)",
+-                      default="zlib")
++                      help="Compression type recognized by mksquashfs (default gzip, lzma needs custom kernel)",
++                      default="gzip")
+     parser.add_option_group(imgopt)
+ 
+     # options related to the config of your system

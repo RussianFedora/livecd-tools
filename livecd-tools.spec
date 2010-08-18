@@ -4,16 +4,23 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 031
-Release: 1%{?dist}.1
+Version: 033
+Release: 3%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
+# To make source tar ball:
+# git clone git://git.fedorahosted.org/livecd
+# cd livecd
+# make dist
 Source0: %{name}-%{version}.tar.bz2
+# Temporary patch until next livecd-tools rollup
+Patch0: gzip.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{version}-%{release}
 Requires: mkisofs
 Requires: isomd5sum
+Requires: parted
 %ifarch %{ix86} x86_64
 Requires: syslinux
 %endif
@@ -51,6 +58,7 @@ like live image or appliances.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 make
@@ -71,6 +79,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/livecd-iso-to-disk
 %{_bindir}/livecd-iso-to-pxeboot
 %{_bindir}/image-creator
+%{_bindir}/liveimage-mount
 
 %files -n python-imgcreate
 %defattr(-,root,root,-)
@@ -81,8 +90,35 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
-* Fri May 07 2010 Jesse Keating <jkeating@redhat.com> - 031-1.1
-- Rebuild
+* Tue Jul 30 2010 Bruno Wolff III <bruno@wolff.to> - 033-3
+- The previous update got replaced by the python update; another bump is needed.
+
+* Tue Jul 27 2010 Bruno Wolff III <bruno@wolff.to> - 033-2
+- Replace 'zlib' with 'gzip' to fix thinko about the compressor name.
+
+* Tue Jul 27 2010 Bruno Wolff III <bruno@wolff.to> - 033-1
+- Fix for vesa splash file change for bz 617115.
+- Use lazy umounts as a work around for bz 617844.
+- Better handling of Environment exceptions for bz 551932.
+
+* Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 032-5
+- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
+
+* Sat Jun 19 2010 Bruno Wolff III <bruno@wolff.to> - 032-4
+- liveimage-mount is new to 023
+
+* Sat Jun 19 2010 Bruno Wolff III <bruno@wolff.to> - 032-3
+- Change the version in the Makefile
+
+* Sat Jun 19 2010 Bruno Wolff III <bruno@wolff.to> - 032-2
+- Fix tar prefix and document how to make it
+
+* Sat Jun 19 2010 Bruno Wolff III <bruno@wolff.to> - 032-1
+- Added support for specifying compressors
+- Add Requires for parted - Bug 605639
+- Add rd_NO_DM dracut cmdline options - Bug 589783
+- See http://git.fedorahosted.org/git/?p=livecd;a=shortlog for a list of
+  upstream commits since 031 was tagged.
 
 * Tue Nov 03 2009 Warren Togami <wtogami@redhat.com> - 031-1
 - livecd-iso-to-disk capable of installing installer DVD to USB
