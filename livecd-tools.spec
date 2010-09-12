@@ -5,7 +5,7 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 034
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -20,6 +20,7 @@ Requires: python-imgcreate = %{version}-%{release}
 Requires: mkisofs
 Requires: isomd5sum
 Requires: parted
+Requires: pyparted
 %ifarch %{ix86} x86_64
 Requires: syslinux
 %endif
@@ -89,6 +90,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Sun Sep 12 2010 Bruno Wolff III <bruno@wolff.to> - 034-2
+- mkbiarch needs pyparted
+
 * Sat Sep 11 2010 Bruno Wolff III <bruno@wolff.to> - 034-1
 - A new experimental script for creating live images.
 - Handle partition devices that have a separator character in them.
