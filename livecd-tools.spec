@@ -4,8 +4,8 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 033
-Release: 3%{?dist}
+Version: 034
+Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -13,7 +13,8 @@ URL: http://git.fedorahosted.org/git/livecd
 # git clone git://git.fedorahosted.org/livecd
 # cd livecd
 # make dist
-Source0: %{name}-%{version}.tar.bz2
+# scp livecd*.tar.bz2 fedorahosted.org:livecd
+Source0: http://fedorahosted.org/releases/l/i/livecd/%{name}-%{version}.tar.bz2
 # Temporary patch until next livecd-tools rollup
 Patch0: gzip.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
@@ -91,6 +92,24 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Sat Sep 11 2010 Bruno Wolff III <bruno@wolff.to> - 034-1
+- A new experimental script for creating live images.
+- Handle partition devices that have a separator character in them.
+- Initial checkin of a new expermiental tool for live backup images.
+- Allow use of stage2 for repos to help with netinst ISOs.
+- Fix issue with using netinst ISOs.
+- Add support for ext4 now that syslinux supports it.
+- Fix for enumerating loop devices using bash 4.1.7.
+- Change --skipcopy to not overwrite other large areas.
+- Add basic video driver option to syslinux/isolinux.
+- Don't create sparse files one byte too large.
+- Display progress information when copying image to USB devices.
+- Set default boot language for USB images to the current locale.
+- Use grep instead of depreceated egrep.
+- Set up locale or there can be problems handling nonascii strings.
+- Try normal umount before falling back to lazy umount.
+- Allow creation of SELinux enabled LiveCD from an SELinux disabled system.
+
 * Tue Jul 30 2010 Bruno Wolff III <bruno@wolff.to> - 033-3
 - The previous update got replaced by the python update; another bump is needed.
 
