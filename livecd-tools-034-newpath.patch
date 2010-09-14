@@ -1,0 +1,12 @@
+diff -up livecd-tools-034/imgcreate/live.py.newpath livecd-tools-034/imgcreate/live.py
+--- livecd-tools-034/imgcreate/live.py.newpath	2010-09-14 16:04:49.205545002 -0400
++++ livecd-tools-034/imgcreate/live.py	2010-09-14 16:05:22.671544997 -0400
+@@ -372,7 +372,7 @@ class x86LiveImageCreator(LiveImageCreat
+ 
+     def __copy_syslinux_background(self, isodest):
+         background_path = self._instroot + \
+-                          "/usr/share/anaconda/syslinux-vesa-splash.jpg"
++                          "/usr/share/anaconda/boot/syslinux-vesa-splash.jpg"
+ 
+         if not os.path.exists(background_path):
+             # fallback to F13 location

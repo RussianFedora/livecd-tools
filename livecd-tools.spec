@@ -5,7 +5,7 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 034
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -19,6 +19,7 @@ Patch0: vesa.patch
 Patch1: regex.patch
 Patch2: menulabel.patch
 Patch3: devloop.patch
+Patch4: livecd-tools-034-newpath.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{version}-%{release}
 Requires: mkisofs
@@ -66,6 +67,7 @@ like live image or appliances.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 make
@@ -98,7 +100,10 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
-* Mon Sep 14 2010 Bruno Wolff III <bruno@wolff.to> - 034-6
+* Tue Sep 14 2010 Tom "spot" Callaway <tcallawa@redhat.com> - 034-7
+- fix background image copying to use new-new logo path
+
+* Tue Sep 14 2010 Bruno Wolff III <bruno@wolff.to> - 034-6
 - One /dev/loop* change had been missed. Backport patch.
 
 * Mon Sep 13 2010 Bruno Wolff III <bruno@wolff.to> - 034-5
