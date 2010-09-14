@@ -58,8 +58,8 @@ like live image or appliances.
 
 
 %prep
-%patch0 -p1
 %setup -q
+%patch0 -p1
 
 %build
 make
