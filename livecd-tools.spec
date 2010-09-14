@@ -5,7 +5,7 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 034
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -15,6 +15,7 @@ URL: http://git.fedorahosted.org/git/livecd
 # make dist
 # scp livecd*.tar.bz2 fedorahosted.org:livecd
 Source0: http://fedorahosted.org/releases/l/i/livecd/%{name}-%{version}.tar.bz2
+Patch0: vesa.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{version}-%{release}
 Requires: mkisofs
@@ -57,6 +58,7 @@ like live image or appliances.
 
 
 %prep
+%patch0 -p1
 %setup -q
 
 %build
@@ -90,6 +92,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Mon Sep 13 2010 Bruno Wolff III <bruno@wolff.to> - 034-3
+- Backported fix for vesa boot menu item
+
 * Sun Sep 12 2010 Bruno Wolff III <bruno@wolff.to> - 034-2
 - mkbiarch needs pyparted
 
