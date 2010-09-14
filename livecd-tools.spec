@@ -5,7 +5,7 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 034
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -17,6 +17,7 @@ URL: http://git.fedorahosted.org/git/livecd
 Source0: http://fedorahosted.org/releases/l/i/livecd/%{name}-%{version}.tar.bz2
 Patch0: vesa.patch
 Patch1: regex.patch
+Patch2: menulabel.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{version}-%{release}
 Requires: mkisofs
@@ -62,6 +63,7 @@ like live image or appliances.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 make
@@ -94,6 +96,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Mon Sep 13 2010 Bruno Wolff III <bruno@wolff.to> - 034-5
+- Backport basic video menu label fix
+
 * Mon Sep 13 2010 Bruno Wolff III <bruno@wolff.to> - 034-4
 - Backport missing parts of the regex fix patch
 
