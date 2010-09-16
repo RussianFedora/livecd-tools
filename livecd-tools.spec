@@ -101,7 +101,7 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
-* Tue Sep 14 2010 Tom "spot" Callaway <tcallawa@redhat.com> - 034-8
+* Thu Sep 16 2010 Bruno Wolff III <bruno@wolff.to> - 034-8
 - extlinux is now in a subpackage that is required by livecd-iso-to-disk
 
 * Tue Sep 14 2010 Tom "spot" Callaway <tcallawa@redhat.com> - 034-7
