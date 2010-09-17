@@ -5,7 +5,7 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 034
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -28,7 +28,7 @@ Requires: parted
 Requires: pyparted
 %ifarch %{ix86} x86_64
 Requires: syslinux
-Requires: syslinux-extlinux
+Requires: /sbin/extlinux
 %endif
 %ifarch ppc
 Requires: yaboot
@@ -101,6 +101,10 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Thu Sep 16 2010 Bruno Wolff III <bruno@wolff.to> - 034-9
+- Change requires to /sbin/extlinux since that will work with old and new
+  versions of syslinux.
+
 * Thu Sep 16 2010 Bruno Wolff III <bruno@wolff.to> - 034-8
 - extlinux is now in a subpackage that is required by livecd-iso-to-disk
 
