@@ -20,6 +20,7 @@ Patch1: regex.patch
 Patch2: menulabel.patch
 Patch3: devloop.patch
 Patch4: livecd-tools-034-newpath.patch
+Patch5: lzo.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{version}-%{release}
 Requires: mkisofs
@@ -69,6 +70,7 @@ like live image or appliances.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 make
