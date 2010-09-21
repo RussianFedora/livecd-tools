@@ -5,7 +5,7 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 034
-Release: 9%{?dist}
+Release: 10%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -103,6 +103,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Tue Sep 21 2010 Bruno Wolff III <bruno@wolff.to> - 034-10
+- Document the lzo compressor.
+
 * Thu Sep 16 2010 Bruno Wolff III <bruno@wolff.to> - 034-9
 - Change requires to /sbin/extlinux since that will work with old and new
   versions of syslinux.
