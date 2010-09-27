@@ -1,0 +1,13 @@
+diff --git a/imgcreate/kickstart.py b/imgcreate/kickstart.py
+index aa2cff0..9a2145a 100644
+--- a/imgcreate/kickstart.py
++++ b/imgcreate/kickstart.py
+@@ -420,7 +420,7 @@ class SelinuxConfig(KickstartConfig):
+         if not os.path.exists(self.path("/sbin/setfiles")):
+             return
+ 
+-        self.call(["/sbin/setfiles", "/etc/selinux/targeted/contexts/files/file_contexts", "-e", "/proc", "-e", "/sys", "-e", "/dev", "-e", "/selinux", "/"])
++        self.call(["/sbin/setfiles", "-e", "/proc", "-e", "/sys", "-e", "/dev", "-e", "/selinux", "/etc/selinux/targeted/contexts/files/file_contexts", "/"])
+ 
+     def apply(self, ksselinux):
+         if os.path.exists(self.path("/usr/sbin/lokkit")):

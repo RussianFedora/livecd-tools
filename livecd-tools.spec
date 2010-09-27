@@ -5,7 +5,7 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 034
-Release: 10%{?dist}
+Release: 11%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -21,6 +21,7 @@ Patch2: menulabel.patch
 Patch3: devloop.patch
 Patch4: livecd-tools-034-newpath.patch
 Patch5: lzo.patch
+Patch6: selinux.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{version}-%{release}
 Requires: mkisofs
@@ -71,6 +72,7 @@ like live image or appliances.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 make
@@ -103,6 +105,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Sun Sep 26 2010 Bruno Wolff III <bruno@wolff.to> - 034-11
+- Fix live image relabel when compose host has selinux disabled.
+
 * Tue Sep 21 2010 Bruno Wolff III <bruno@wolff.to> - 034-10
 - Document the lzo compressor.
 
