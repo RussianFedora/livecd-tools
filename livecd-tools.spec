@@ -4,8 +4,9 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 034
-Release: 11%{?dist}
+Version: 0.3.5
+Release: 1%{?dist}
+Epoch: 1
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -15,15 +16,8 @@ URL: http://git.fedorahosted.org/git/livecd
 # make dist
 # scp livecd*.tar.bz2 fedorahosted.org:livecd
 Source0: http://fedorahosted.org/releases/l/i/livecd/%{name}-%{version}.tar.bz2
-Patch0: vesa.patch
-Patch1: regex.patch
-Patch2: menulabel.patch
-Patch3: devloop.patch
-Patch4: livecd-tools-034-newpath.patch
-Patch5: lzo.patch
-Patch6: selinux.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-Requires: python-imgcreate = %{version}-%{release}
+Requires: python-imgcreate = %{epoch}:%{version}-%{release}
 Requires: mkisofs
 Requires: isomd5sum
 Requires: parted
@@ -66,13 +60,6 @@ like live image or appliances.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
 
 %build
 make
@@ -98,13 +85,17 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n python-imgcreate
 %defattr(-,root,root,-)
-%doc API
+%doc API COPYING
 %dir %{python_sitelib}/imgcreate
 %{python_sitelib}/imgcreate/*.py
 %{python_sitelib}/imgcreate/*.pyo
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Mon Nov 01 2010 Brian C. Lane <bcl@redhat.com> - 0.3.5-1
+- Converting version number to NVR
+- Removed patches (now included in v0.3.5)
+
 * Sun Sep 26 2010 Bruno Wolff III <bruno@wolff.to> - 034-11
 - Fix live image relabel when compose host has selinux disabled.
 
