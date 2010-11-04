@@ -4,8 +4,9 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 033
-Release: 3%{?dist}
+Version: 0.3.5
+Release: 1%{?dist}
+Epoch: 1
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.fedorahosted.org/git/livecd
@@ -13,16 +14,17 @@ URL: http://git.fedorahosted.org/git/livecd
 # git clone git://git.fedorahosted.org/livecd
 # cd livecd
 # make dist
-Source0: %{name}-%{version}.tar.bz2
-# Temporary patch until next livecd-tools rollup
-Patch0: gzip.patch
+# scp livecd*.tar.bz2 fedorahosted.org:livecd
+Source0: http://fedorahosted.org/releases/l/i/livecd/%{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-Requires: python-imgcreate = %{version}-%{release}
+Requires: python-imgcreate = %{epoch}:%{version}-%{release}
 Requires: mkisofs
 Requires: isomd5sum
 Requires: parted
+Requires: pyparted
 %ifarch %{ix86} x86_64
 Requires: syslinux
+Requires: /sbin/extlinux
 %endif
 %ifarch ppc
 Requires: yaboot
@@ -58,7 +60,6 @@ like live image or appliances.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 make
@@ -80,16 +81,70 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/livecd-iso-to-pxeboot
 %{_bindir}/image-creator
 %{_bindir}/liveimage-mount
+%{_bindir}/mkbiarch
 
 %files -n python-imgcreate
 %defattr(-,root,root,-)
-%doc API
+%doc API COPYING
 %dir %{python_sitelib}/imgcreate
 %{python_sitelib}/imgcreate/*.py
 %{python_sitelib}/imgcreate/*.pyo
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Mon Nov 01 2010 Brian C. Lane <bcl@redhat.com> - 0.3.5-1
+- Converting version number to NVR
+- Removed patches (now included in v0.3.5)
+
+* Sun Sep 26 2010 Bruno Wolff III <bruno@wolff.to> - 034-11
+- Fix live image relabel when compose host has selinux disabled.
+
+* Tue Sep 21 2010 Bruno Wolff III <bruno@wolff.to> - 034-10
+- Document the lzo compressor.
+
+* Thu Sep 16 2010 Bruno Wolff III <bruno@wolff.to> - 034-9
+- Change requires to /sbin/extlinux since that will work with old and new
+  versions of syslinux.
+
+* Thu Sep 16 2010 Bruno Wolff III <bruno@wolff.to> - 034-8
+- extlinux is now in a subpackage that is required by livecd-iso-to-disk
+
+* Tue Sep 14 2010 Tom "spot" Callaway <tcallawa@redhat.com> - 034-7
+- fix background image copying to use new-new logo path
+
+* Tue Sep 14 2010 Bruno Wolff III <bruno@wolff.to> - 034-6
+- One /dev/loop* change had been missed. Backport patch.
+
+* Mon Sep 13 2010 Bruno Wolff III <bruno@wolff.to> - 034-5
+- Backport basic video menu label fix
+
+* Mon Sep 13 2010 Bruno Wolff III <bruno@wolff.to> - 034-4
+- Backport missing parts of the regex fix patch
+
+* Mon Sep 13 2010 Bruno Wolff III <bruno@wolff.to> - 034-3
+- Backported fix for vesa boot menu item
+
+* Sun Sep 12 2010 Bruno Wolff III <bruno@wolff.to> - 034-2
+- mkbiarch needs pyparted
+
+* Sat Sep 11 2010 Bruno Wolff III <bruno@wolff.to> - 034-1
+- A new experimental script for creating live images.
+- Handle partition devices that have a separator character in them.
+- Initial checkin of a new expermiental tool for live backup images.
+- Allow use of stage2 for repos to help with netinst ISOs.
+- Fix issue with using netinst ISOs.
+- Add support for ext4 now that syslinux supports it.
+- Fix for enumerating loop devices using bash 4.1.7.
+- Change --skipcopy to not overwrite other large areas.
+- Add basic video driver option to syslinux/isolinux.
+- Don't create sparse files one byte too large.
+- Display progress information when copying image to USB devices.
+- Set default boot language for USB images to the current locale.
+- Use grep instead of depreceated egrep.
+- Set up locale or there can be problems handling nonascii strings.
+- Try normal umount before falling back to lazy umount.
+- Allow creation of SELinux enabled LiveCD from an SELinux disabled system.
+
 * Tue Jul 30 2010 Bruno Wolff III <bruno@wolff.to> - 033-3
 - The previous update got replaced by the python update; another bump is needed.
 
