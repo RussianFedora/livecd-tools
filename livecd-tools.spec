@@ -4,7 +4,7 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 0.3.5
+Version: 0.3.6
 Release: 1%{?dist}
 Epoch: 1
 License: GPLv2
@@ -92,6 +92,20 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Mon Nov 15 2010 Brian C. Lane <bcl@redhat.com> - 0.3.6-1
+- Bump version to 0.3.6 (bcl)
+- Misc. fixups (#652522) (fgrose)
+- Set indentation to 4 spaces (#652522) (fgrose)
+- Add a release target (bcl)
+- Pass dracut args during check (#589778) (bcl)
+- Update dracut args (#652484) (bcl)
+- Cleanup tabs (#652522) (fgrose)
+- Cleanup EOL spaces (#652522) (fgrose)
+- Typo. Need space before ]. (bruno)
+- Add support for timeout and totaltimeout to livecd-iso-to-disk (#531566)
+  (bcl)
+- Add proxy support to livecd-creator (#649546) (bcl)
+
 * Mon Nov 01 2010 Brian C. Lane <bcl@redhat.com> - 0.3.5-1
 - Converting version number to NVR
 - Removed patches (now included in v0.3.5)
