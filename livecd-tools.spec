@@ -4,7 +4,7 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 0.3.6
+Version: 15.0
 Release: 1%{?dist}
 Epoch: 1
 License: GPLv2
@@ -92,6 +92,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Mon Nov 15 2010 Brian C. Lane <bcl@redhat.com> - 15.0-1
+- Each branch needs a different version number.
+
 * Mon Nov 15 2010 Brian C. Lane <bcl@redhat.com> - 0.3.6-1
 - Bump version to 0.3.6 (bcl)
 - Misc. fixups (#652522) (fgrose)
