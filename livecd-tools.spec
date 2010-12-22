@@ -4,7 +4,7 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 14.0
+Version: 14.1
 Release: 1%{?dist}
 Epoch: 1
 License: GPLv2
@@ -92,6 +92,13 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Wed Dec 22 2010 Brian C. Lane <bcl@redhat.com> - 14.1-1
+- Version 14.1 (bcl)
+- Trap copyFile errors (#663849) (fgrose)
+- Create tmpdir if it doesn't exist (#658632) (bcl)
+- Fix partition number selection for MMC bus devices (#587411) (fgrose)
+- Tolerate empty transactions (lkundrak)
+
 * Mon Nov 15 2010 Brian C. Lane <bcl@redhat.com> - 14.0-1
 - Change version for f14-branch (bcl)
 - Misc. fixups (#652522) (fgrose)
