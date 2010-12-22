@@ -4,7 +4,7 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 15.0
+Version: 15.2
 Release: 1%{?dist}
 Epoch: 1
 License: GPLv2
@@ -92,6 +92,26 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Wed Dec 22 2010 Brian C. Lane <bcl@redhat.com> - 15.2-1
+- Version 5.2 (bcl)
+- Assign a device-mapper UUID w/ subsystem prefix to the dm snapshot. (dlehman)
+- Fix git URLs to match reality. (dlehman)
+- Trap copyFile errors (#663849) (fgrose)
+- Fix incomplete rename of freespace variable (#656154) (fgrose)
+
+* Tue Nov 30 2010 Brian C. Lane <bcl@redhat.com> - 15.1-1
+- Bump version to 15.1 (bcl)
+- Wrap subprocess.call() so we can capture all command output for debugging.
+  (jlaska)
+- Work with the logging settings when emitting progress. (jlaska)
+- Add a quiet option to surpress stdout. Adjust handle_logfile to not surpress
+  stdout. (jlaska)
+- Fix partition number selection for MMC bus devices (#587411) (fgrose)
+- Fix disk space estimation errors (#656154) (fgrose)
+- Tolerate empty transactions (lkundrak)
+- Merge livecd-creator and image-creator (lkundrak)
+- Cleanup if/then blocks (#652522) (fgrose)
+
 * Mon Nov 15 2010 Brian C. Lane <bcl@redhat.com> - 15.0-1
 - Each branch needs a different version number.
 
