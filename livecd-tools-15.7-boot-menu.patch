@@ -1,0 +1,39 @@
+diff -urN livecd-tools-15.7.orig/imgcreate/live.py livecd-tools-15.7/imgcreate/live.py
+--- livecd-tools-15.7.orig/imgcreate/live.py	2011-07-26 15:10:31.560925920 +0400
++++ livecd-tools-15.7/imgcreate/live.py	2011-07-26 18:48:23.931874378 +0400
+@@ -532,6 +532,17 @@
+                                            fslabel = self.fslabel,
+                                            isofstype = "auto",
+                                            liveargs = kern_opts,
++                                           long = "Install",
++                                           short = "liveinst" + index,
++                                           basicvideo = "",
++                                           xdriver = "",
++                                           extra = "liveinst",
++                                           index = index)
++
++            cfg += self.__get_image_stanza(is_xen, isDracut,
++                                           fslabel = self.fslabel,
++                                           isofstype = "auto",
++                                           liveargs = kern_opts,
+                                            long = long + " (Basic Video)",
+                                            short = "linux" + index,
+                                            basicvideo = basic,
+@@ -539,6 +550,17 @@
+                                            extra = "",
+                                            index = index)
+ 
++            cfg += self.__get_image_stanza(is_xen, isDracut,
++                                           fslabel = self.fslabel,
++                                           isofstype = "auto",
++                                           liveargs = kern_opts,
++                                           long = long + "into RAM",
++                                           short = "live_ram" + index,
++                                           basicvideo = "",
++                                           xdriver = "",
++                                           extra = "live_ram",
++                                           index = index)
++
+             if checkisomd5:
+                 cfg += self.__get_image_stanza(is_xen, isDracut,
+                                                fslabel = self.fslabel,

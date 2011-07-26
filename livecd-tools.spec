@@ -4,8 +4,8 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 15.2
-Release: 1%{?dist}
+Version: 15.7
+Release: 1%{?dist}.1.R
 Epoch: 1
 License: GPLv2
 Group: System Environment/Base
@@ -16,6 +16,7 @@ URL: http://git.fedorahosted.org/git/livecd
 # make dist
 # scp livecd*.tar.bz2 fedorahosted.org:livecd
 Source0: http://fedorahosted.org/releases/l/i/livecd/%{name}-%{version}.tar.bz2
+Patch0: livecd-tools-15.7-boot-menu.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{epoch}:%{version}-%{release}
 Requires: mkisofs
@@ -60,6 +61,7 @@ like live image or appliances.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 make
@@ -92,6 +94,63 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Tue Jul 26 2011 Arkady L. Shane <ashejn@russianfedora.ru>
+- added live_ram and install items to live menu
+
+* Tue May 03 2011 Brian C. Lane <bcl@redhat.com> - 15.7-1
+- Version 15.7 (bcl)
+- symlink /etc/mtab to /proc/self/mounts (#688277) (bcl)
+
+* Tue Mar 29 2011 Brian C. Lane <bcl@redhat.com> - 15.6-1
+- Version 15.6 (bcl)
+- Symlink image-creator instead of hardlink (#689167) (bcl)
+- Mailing list address changed (lkundrak)
+- gptmbr can be written directly to the mbr (bcl)
+- Fixup livedir support (#679023) (jan.kratochvil)
+
+* Fri Feb 18 2011 Brian C. Lane <bcl@redhat.com> - 15.5-1
+- Version 15.5 (bcl)
+- Print reason for sudden exit (bcl)
+- Fix skipcopy usage with DVD iso (#644194) (bmj001)
+- Move selinux relabel to after %post (#648591) (bcl)
+- Add support for virtio disks to livecd (#672936) (bcl)
+- Support attached LiveOS devices as well as image files for LiveOS editing.
+  (fgrose)
+- Check return value on udevadm (#637258) (bcl)
+
+* Tue Feb 11 2011 Brian C. Lane <bcl@redhat.com> - 15.4-1
+- Version 15.4 (bcl)
+- Add tmpdir to LiveImageCreator (bcl)
+- Source may be a file or a block device, mount accordingly (bcl)
+- Enable reading of SquashFS compression type. (fgrose)
+- Enable cloning of a running LiveOS image into a fresh iso. (fgrose)
+- Update usage documentation & add it to the script (fgrose)
+- Support the propagation of an installed Live image (fgrose)
+- Rename image source- and target-related variables (fgrose)
+- Align start of partition at 1MiB (#668967) (bcl)
+- Pass tmpdir to ImageCreator class initializer (#476676) (bcl)
+- Add tmpdir to ImageCreator class initializer (#476676) (bcl)
+- Enable an optional tmpdir for e2image in fs.resize2fs() (fgrose)
+- Bad karma commit reverted; The option to boot from a local drive *MUST* exist
+  as 99.9% of our consumers have default desktop hardware configurations.
+  (jeroen.van.meeuwen)
+- Really switch the default compression type, not just the default cli option
+  value (jeroen.van.meeuwen)
+
+* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:15.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
+* Thu Jan 27 2011 Brian C. Lane <bcl@redhat.com> - 15.3-1
+- Version 15.3 (bcl)
+- Remove boot from local drive option (bcl)
+- Check for one big initrd.img (#671900) (bcl)
+- Make xz the default compression type for live images. (bruno)
+- Update documentation for xz availability. (bruno)
+- Change releasever to a command line option (#667474) (bcl)
+
+* Tue Jan 04 2011 Dennis Gilmore <dennis@ausil.us> - 15.2-2
+- patch to drop support of releasever in urls it destroys image creation in koji
+
 * Wed Dec 22 2010 Brian C. Lane <bcl@redhat.com> - 15.2-1
 - Version 5.2 (bcl)
 - Assign a device-mapper UUID w/ subsystem prefix to the dm snapshot. (dlehman)
