@@ -1,7 +1,5 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "import distutils.sysconfig as d; print d.get_python_lib()")}
 
-%define debug_package %{nil}
-
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 15.7
@@ -15,7 +13,7 @@ URL: http://git.fedorahosted.org/git/livecd
 # cd livecd
 # make dist
 # scp livecd*.tar.bz2 fedorahosted.org:livecd
-Source0: http://fedorahosted.org/releases/l/i/livecd/livecd-tools-15.7.tar.bz2
+Source0: http://fedorahosted.org/releases/l/i/livecd/%{name}-%{version}-15.7.tar.bz2
 Patch0: livecd-tools-15.7-boot-menu.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{epoch}:%{version}-%{release}
