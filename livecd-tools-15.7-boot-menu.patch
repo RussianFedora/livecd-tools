@@ -27,7 +27,7 @@ diff -urN livecd-tools-15.7.orig/imgcreate/live.py livecd-tools-15.7/imgcreate/l
 +                                           fslabel = self.fslabel,
 +                                           isofstype = "auto",
 +                                           liveargs = kern_opts,
-+                                           long = long + "into RAM",
++                                           long = long + " (into RAM)",
 +                                           short = "live_ram" + index,
 +                                           basicvideo = "",
 +                                           xdriver = "",
