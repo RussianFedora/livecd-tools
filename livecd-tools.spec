@@ -3,7 +3,7 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 15.7
-Release: 1%{?dist}.1.R
+Release: 1%{?dist}.2.R
 Epoch: 1
 License: GPLv2
 Group: System Environment/Base
@@ -92,7 +92,10 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
-* Tue Jul 26 2011 Arkady L. Shane <ashejn@russianfedora.ru>
+* Thu Jul 28 2011 Arkady L. Shane <ashejn@russianfedora.ru> 15.7-1.2.R
+- fix label
+
+* Tue Jul 26 2011 Arkady L. Shane <ashejn@russianfedora.ru> 15.7-1.1.R
 - added live_ram and install items to live menu
 
 * Tue May 03 2011 Brian C. Lane <bcl@redhat.com> - 15.7-1
