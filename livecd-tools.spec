@@ -1,9 +1,11 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "import distutils.sysconfig as d; print d.get_python_lib()")}
 
+%define debug_package %{nil}
+
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 15.7
-Release: 1%{?dist}.2.R
+Version: 16.6
+Release: 1%{?dist}.1.R
 Epoch: 1
 License: GPLv2
 Group: System Environment/Base
@@ -14,13 +16,14 @@ URL: http://git.fedorahosted.org/git/livecd
 # make dist
 # scp livecd*.tar.bz2 fedorahosted.org:livecd
 Source0: http://fedorahosted.org/releases/l/i/livecd/%{name}-%{version}.tar.bz2
-Patch0: livecd-tools-15.7-boot-menu.patch
+Patch0: livecd-tools-16.6-rfremix-menu.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{epoch}:%{version}-%{release}
 Requires: mkisofs
 Requires: isomd5sum
 Requires: parted
 Requires: pyparted
+Requires: util-linux
 %ifarch %{ix86} x86_64
 Requires: syslinux
 Requires: /sbin/extlinux
@@ -92,25 +95,68 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
-* Thu Jul 28 2011 Arkady L. Shane <ashejn@russianfedora.ru> 15.7-1.2.R
-- fix label
+* Thu Sep 22 2011 Arkady L. Shane <ashejn@russianfedora.ru> 16.6-1.1.R
+- new RFRemix menu
 
-* Tue Jul 26 2011 Arkady L. Shane <ashejn@russianfedora.ru> 15.7-1.1.R
-- added live_ram and install items to live menu
+* Wed Sep 14 2011 Brian C. Lane <bcl@redhat.com> 16.6-1
+- Version 16.6 (bcl)
+- Stop creating backup image before resizing (#737243) (bcl)
+- Correct some syslinux typos (#738381) (bcl)
+- splash is now png (#738381) (bcl)
 
-* Tue May 03 2011 Brian C. Lane <bcl@redhat.com> - 15.7-1
-- Version 15.7 (bcl)
+* Thu Sep 01 2011 Brian C. Lane <bcl@redhat.com> 16.5-1
+- Version 16.5 (bcl)
+- Add title and product args (#669120) (bcl)
+- Skip bind mounts when source isn't there (bcl)
+- Add new syslinux.cfg template (#734173) (bcl)
+
+* Fri Aug 26 2011 Brian C. Lane <bcl@redhat.com> 16.4-1
+- Version 16.4 (bcl)
+- Use copyFile on the iso (bcl)
+- Use rsync to copy if available (bcl)
+- Quote $SRC so iso's with spaces will work (#694915) (bruno)
+- Handle move to /sys/fs/selinux (#728576) (dwalsh)
+- Turn on the legacy_boot flag for EFI (#680563) (bcl)
+- Don't ask about replacing MBR when formatting (bcl)
+- Make MBR replacement message more clear (bcl)
+- Ensure previous filesystems are wiped when formatting (#712553) (bcl)
+- Modify pxeboot script to work with F16 (bcl)
+- Add initial support for ARM architectures (martin.langhoff)
+- Copy updates and product image files (bcl)
+
+* Thu Mar 31 2011 Brian C. Lane <bcl@redhat.com> 16.3-1
+- Version 16.3 (bcl)
+- Copy old initrd/xen files to isolinux when using base-on (#690940) (bcl)
+- Don't fail on missing splash image (bcl)
+- Images go into $SYSLINUXPATH (bcl)
+- fix typo (bcl)
+- Check for spaces in fs label when using overlay (#597599) (bcl)
+- Fix logic for syslinux check (bcl)
+- Fix image-creator symlink so that it is relative (bcl)
 - symlink /etc/mtab to /proc/self/mounts (#688277) (bcl)
-
-* Tue Mar 29 2011 Brian C. Lane <bcl@redhat.com> - 15.6-1
-- Version 15.6 (bcl)
+- liveimage-mount installed LiveOS with overlay (fgrose)
+- Fix overzealous boot->BOOT change (bcl)
+- Fix return code failure (#689360) (fgrose)
+- Fix pipefailure in checkSyslinuxVersion (#689329) (fgrose)
 - Symlink image-creator instead of hardlink (#689167) (bcl)
+- Add extracting BOOTX64.efi from iso (#688258) (bcl)
+- Add repo to DVD EFI install config file (#688258) (bcl)
+- Add EFI support to netboot (#688258) (bcl)
+- Support /EFI/BOOT or /EFI/boot (#688258) (bcl)
+
+* Mon Mar 14 2011 Brian C. Lane <bcl@redhat.com> 16.2-1
+- Version 16.2 (bcl)
+- livecd-iso-to-disk: Catch all failures (lkundrak)
 - Mailing list address changed (lkundrak)
+- Fall back to to msdos format if no extlinux (bcl)
+- Create an ext4 filesystem by default for home.img (fgrose)
+- Add error checks to home.img creation (bcl)
+- livecd-iso-to-disk Detect more disk space issues (fgrose)
 - gptmbr can be written directly to the mbr (bcl)
 - Fixup livedir support (#679023) (jan.kratochvil)
 
-* Fri Feb 18 2011 Brian C. Lane <bcl@redhat.com> - 15.5-1
-- Version 15.5 (bcl)
+* Fri Feb 18 2011 Brian C. Lane <bcl@redhat.com> 16.1-1
+- Version 16.1 (bcl)
 - Print reason for sudden exit (bcl)
 - Fix skipcopy usage with DVD iso (#644194) (bmj001)
 - Move selinux relabel to after %post (#648591) (bcl)
@@ -119,8 +165,8 @@ rm -rf $RPM_BUILD_ROOT
   (fgrose)
 - Check return value on udevadm (#637258) (bcl)
 
-* Tue Feb 11 2011 Brian C. Lane <bcl@redhat.com> - 15.4-1
-- Version 15.4 (bcl)
+* Tue Feb 15 2011 Brian C. Lane <bcl@redhat.com> 16.0-1
+- Version 16.0 (bcl)
 - Add tmpdir to LiveImageCreator (bcl)
 - Source may be a file or a block device, mount accordingly (bcl)
 - Enable reading of SquashFS compression type. (fgrose)

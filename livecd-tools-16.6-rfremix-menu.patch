@@ -1,0 +1,36 @@
+diff -urN livecd-tools-16.6.orig/imgcreate/live.py livecd-tools-16.6/imgcreate/live.py
+--- livecd-tools-16.6.orig/imgcreate/live.py	2011-09-22 14:10:31.961736590 +0400
++++ livecd-tools-16.6/imgcreate/live.py	2011-09-22 14:21:35.857835984 +0400
+@@ -563,6 +563,16 @@
+             if default:
+                 linux[-1] += "  menu default\n"
+ 
++            install.append(self.__get_image_stanza(is_xen, isDracut,
++                                           fslabel = self.fslabel,
++                                           isofstype = "auto",
++                                           liveargs = kern_opts,
++                                           long = "^Install " + long + " in graphics mode.",
++                                           short = "install" + index,
++                                           extra = "liveinst",
++                                           help = "Try this option to install " + long + " on your hard drive.",
++                                           index = index))
++
+             basic.append(self.__get_image_stanza(is_xen, isDracut,
+                                            fslabel = self.fslabel,
+                                            isofstype = "auto",
+@@ -572,6 +582,15 @@
+                                            extra = "xdriver=vesa nomodeset",
+                                            help = "Try this option out if you're having trouble installing " + long + ".",
+                                            index = index))
++            ram.append(self.__get_image_stanza(is_xen, isDracut,
++                                           fslabel = self.fslabel,
++                                           isofstype = "auto",
++                                           liveargs = kern_opts,
++                                           long = "Start " + long + " into ^RAM.",
++                                           short = "live_ram" + index,
++                                           extra = "live_ram",
++                                           help = "Load " + long + " image into RAM.",
++                                           index = index))
+ 
+             if checkisomd5:
+                 check.append(self.__get_image_stanza(is_xen, isDracut,
