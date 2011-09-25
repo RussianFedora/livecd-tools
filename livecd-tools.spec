@@ -5,7 +5,7 @@
 Summary: Tools for building live CDs
 Name: livecd-tools
 Version: 16.6
-Release: 1%{?dist}.1.R
+Release: 1%{?dist}.2.R
 Epoch: 1
 License: GPLv2
 Group: System Environment/Base
@@ -95,6 +95,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Sun Sep 25 2011 Alexei Panov <me AT elemc DOT name> - 1:16.6-1.2.R
+- Fix patch
+
 * Thu Sep 22 2011 Arkady L. Shane <ashejn@russianfedora.ru> 16.6-1.1.R
 - new RFRemix menu
 

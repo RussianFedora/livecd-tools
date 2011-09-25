@@ -1,36 +1,53 @@
-diff -urN livecd-tools-16.6.orig/imgcreate/live.py livecd-tools-16.6/imgcreate/live.py
---- livecd-tools-16.6.orig/imgcreate/live.py	2011-09-22 14:10:31.961736590 +0400
-+++ livecd-tools-16.6/imgcreate/live.py	2011-09-22 14:21:35.857835984 +0400
-@@ -563,6 +563,16 @@
-             if default:
-                 linux[-1] += "  menu default\n"
- 
-+            install.append(self.__get_image_stanza(is_xen, isDracut,
+diff -uNdr livecd-tools-16.6.original/imgcreate/live.py livecd-tools-16.6/imgcreate/live.py
+--- livecd-tools-16.6.original/imgcreate/live.py	2011-09-14 21:55:45.000000000 +0400
++++ livecd-tools-16.6/imgcreate/live.py	2011-09-25 17:01:21.339764466 +0400
+@@ -559,9 +559,17 @@
+                                            extra = "",
+                                            help = "",
+                                            index = index))
+-
++            linux.append(self.__get_image_stanza(is_xen, isDracut,
 +                                           fslabel = self.fslabel,
 +                                           isofstype = "auto",
 +                                           liveargs = kern_opts,
-+                                           long = "^Install " + long + " in graphics mode.",
-+                                           short = "install" + index,
++                                           long = "^Install " + long,
++                                           short = "liveinst" + index,
 +                                           extra = "liveinst",
-+                                           help = "Try this option to install " + long + " on your hard drive.",
++                                           help = "",
 +                                           index = index))
-+
+             if default:
+-                linux[-1] += "  menu default\n"
++                linux[-2] += "  menu default\n"
+ 
              basic.append(self.__get_image_stanza(is_xen, isDracut,
                                             fslabel = self.fslabel,
-                                            isofstype = "auto",
-@@ -572,6 +582,15 @@
-                                            extra = "xdriver=vesa nomodeset",
+@@ -573,6 +581,16 @@
                                             help = "Try this option out if you're having trouble installing " + long + ".",
                                             index = index))
-+            ram.append(self.__get_image_stanza(is_xen, isDracut,
+ 
++            basic.append(self.__get_image_stanza(is_xen, isDracut,
 +                                           fslabel = self.fslabel,
 +                                           isofstype = "auto",
 +                                           liveargs = kern_opts,
 +                                           long = "Start " + long + " into ^RAM.",
 +                                           short = "live_ram" + index,
 +                                           extra = "live_ram",
-+                                           help = "Load " + long + " image into RAM.",
++                                           help = "This option for load live system of "+ long+ " into RAM.",
 +                                           index = index))
- 
++
              if checkisomd5:
                  check.append(self.__get_image_stanza(is_xen, isDracut,
+                                                fslabel = self.fslabel,
+@@ -640,8 +658,11 @@
+   menu title Troubleshooting
+ """
+         # Add basic video and check to submenu
+-        for b, c in zip(basic, check):
++        #for b, c in zip(basic, check):
++        for b in basic:
+             cfg += b
++
++        for c in check:
+             if c:
+                 cfg += c
+ 
