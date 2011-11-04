@@ -4,8 +4,8 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 16.6
-Release: 1%{?dist}.2.R
+Version: 16.9
+Release: 1%{?dist}.R
 Epoch: 1
 License: GPLv2
 Group: System Environment/Base
@@ -95,6 +95,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
+* Fri Nov  4 2011 Arkady L. Shane <ashejn@russianfedoa.ru> - 1:16.9-1.R
+- update to 16.9
+
 * Sun Sep 25 2011 Alexei Panov <me AT elemc DOT name> - 1:16.6-1.2.R
 - Fix patch
 
