@@ -4,8 +4,8 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 16.9
-Release: 1%{?dist}.R
+Version: 16.11
+Release: 1%{?dist}
 Epoch: 1
 License: GPLv2
 Group: System Environment/Base
@@ -24,6 +24,9 @@ Requires: isomd5sum
 Requires: parted
 Requires: pyparted
 Requires: util-linux
+Requires: dosfstools
+Requires: e2fsprogs
+Requires: lorax
 %ifarch %{ix86} x86_64
 Requires: syslinux
 Requires: /sbin/extlinux
@@ -84,6 +87,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/livecd-iso-to-pxeboot
 %{_bindir}/image-creator
 %{_bindir}/liveimage-mount
+%{_bindir}/edit-livecd
 %{_bindir}/mkbiarch
 
 %files -n python-imgcreate
@@ -95,14 +99,43 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
-* Fri Nov  4 2011 Arkady L. Shane <ashejn@russianfedoa.ru> - 1:16.9-1.R
-- update to 16.9
+* Sun Mar 11 2012 Arkady L. Shane <ashejn@russianfedora.ru> 16.11-1.R
+- apply rfremix menu patch
 
-* Sun Sep 25 2011 Alexei Panov <me AT elemc DOT name> - 1:16.6-1.2.R
-- Fix patch
+* Thu Mar 01 2012 Brian C. Lane <bcl@redhat.com> 16.11-1
+- Version 16.11 (bcl)
+- livecd-iso-to-disk: Add 2MB slop to calculation (bcl)
+- Change EFI/boot to EFI/BOOT (mjg)
+- Add support for generating EFI-bootable hybrid images (mjg)
+- livecd-iso-to-disk: create partition for iso (bcl)
+- check for valid script path before editing livecd image and update usage
+  options confusion (jboggs)
+- imgcreate: fix typo in ResizeError (bcl)
+- add missing selinux_mountpoint class object to edit-livecd (jboggs)
+- selinux may be off on the host, skip mount (#737064) (bcl)
+- Set base_persistdir (#741614) (bcl)
+- Fix the fix for dracut modules (#766955) (bcl)
+- Use dracut.conf.d instead fo dracut.conf (bcl)
+- dracut needs dmsquash-live explicitly included (bcl)
+- edit-livecd: -k --kickstart option (apevec)
 
-* Thu Sep 22 2011 Arkady L. Shane <ashejn@russianfedora.ru> 16.6-1.1.R
-- new RFRemix menu
+* Wed Dec 21 2011 Brian C. Lane <bcl@redhat.com> 16.10-1
+- Version 16.10 (bcl)
+- python-imgcreate: remove -f from second lokkit call (#769457) (bcl)
+- Install edit-livecd to /usr/bin (bcl)
+
+* Thu Nov 03 2011 Brian C. Lane <bcl@redhat.com> 16.9-1
+- Version 16.9 (bcl)
+- Fix indent and typo in liveimage-mount (#749643) (bcl)
+- Make sure the target is labeled LIVE (#751213) (bcl)
+
+* Wed Oct 26 2011 Brian C. Lane <bcl@redhat.com> 16.8-1
+- Version 16.8 (bcl)
+- Correct patch (#748344) (bcl)
+
+* Mon Oct 24 2011 Brian C. Lane <bcl@redhat.com> 16.7-1
+- Version 16.7 (bcl)
+- Add dracut args to EFI grub.conf creation (#748344) (bcl)
 
 * Wed Sep 14 2011 Brian C. Lane <bcl@redhat.com> 16.6-1
 - Version 16.6 (bcl)
