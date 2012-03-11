@@ -4,7 +4,7 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 16.11
+Version: 16.10
 Release: 1%{?dist}
 Epoch: 1
 License: GPLv2
@@ -99,25 +99,8 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
-* Sun Mar 11 2012 Arkady L. Shane <ashejn@russianfedora.ru> 16.11-1.R
+* Sun Mar 11 2012 Arkady L. Shane <ashejn@russianfedora.ru> 16.10-1.R
 - apply rfremix menu patch
-
-* Thu Mar 01 2012 Brian C. Lane <bcl@redhat.com> 16.11-1
-- Version 16.11 (bcl)
-- livecd-iso-to-disk: Add 2MB slop to calculation (bcl)
-- Change EFI/boot to EFI/BOOT (mjg)
-- Add support for generating EFI-bootable hybrid images (mjg)
-- livecd-iso-to-disk: create partition for iso (bcl)
-- check for valid script path before editing livecd image and update usage
-  options confusion (jboggs)
-- imgcreate: fix typo in ResizeError (bcl)
-- add missing selinux_mountpoint class object to edit-livecd (jboggs)
-- selinux may be off on the host, skip mount (#737064) (bcl)
-- Set base_persistdir (#741614) (bcl)
-- Fix the fix for dracut modules (#766955) (bcl)
-- Use dracut.conf.d instead fo dracut.conf (bcl)
-- dracut needs dmsquash-live explicitly included (bcl)
-- edit-livecd: -k --kickstart option (apevec)
 
 * Wed Dec 21 2011 Brian C. Lane <bcl@redhat.com> 16.10-1
 - Version 16.10 (bcl)
