@@ -16,7 +16,7 @@ URL: http://git.fedorahosted.org/git/livecd
 # make dist
 # scp livecd*.tar.bz2 fedorahosted.org:livecd
 Source0: http://fedorahosted.org/releases/l/i/livecd/%{name}-%{version}.tar.bz2
-Patch0: livecd-tools-16.6-rfremix-menu.patch
+Patch0: livecd-tools-17.7-rfremix-menu.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: python-imgcreate = %{epoch}:%{version}-%{release}
 Requires: mkisofs
