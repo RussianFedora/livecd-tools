@@ -1,7 +1,7 @@
-diff -uNdr livecd-tools-16.6.original/imgcreate/live.py livecd-tools-16.6/imgcreate/live.py
---- livecd-tools-16.6.original/imgcreate/live.py	2011-09-14 21:55:45.000000000 +0400
-+++ livecd-tools-16.6/imgcreate/live.py	2011-09-25 17:01:21.339764466 +0400
-@@ -559,9 +559,17 @@
+diff -urN livecd-tools-17.7.orig/imgcreate/live.py livecd-tools-17.7/imgcreate/live.py
+--- livecd-tools-17.7.orig/imgcreate/live.py	2012-04-08 22:59:14.371110268 +0400
++++ livecd-tools-17.7/imgcreate/live.py	2012-04-08 22:59:26.294075962 +0400
+@@ -582,9 +582,17 @@
                                             extra = "",
                                             help = "",
                                             index = index))
@@ -21,8 +21,8 @@ diff -uNdr livecd-tools-16.6.original/imgcreate/live.py livecd-tools-16.6/imgcre
  
              basic.append(self.__get_image_stanza(is_xen, isDracut,
                                             fslabel = self.fslabel,
-@@ -573,6 +581,16 @@
-                                            help = "Try this option out if you're having trouble installing " + long + ".",
+@@ -596,6 +604,16 @@
+                                            help = "Try this option out if you're having trouble starting.",
                                             index = index))
  
 +            basic.append(self.__get_image_stanza(is_xen, isDracut,
@@ -38,7 +38,7 @@ diff -uNdr livecd-tools-16.6.original/imgcreate/live.py livecd-tools-16.6/imgcre
              if checkisomd5:
                  check.append(self.__get_image_stanza(is_xen, isDracut,
                                                 fslabel = self.fslabel,
-@@ -640,8 +658,11 @@
+@@ -665,8 +683,11 @@
    menu title Troubleshooting
  """
          # Add basic video and check to submenu
