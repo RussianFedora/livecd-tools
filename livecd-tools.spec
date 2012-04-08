@@ -4,7 +4,7 @@
 
 Summary: Tools for building live CDs
 Name: livecd-tools
-Version: 16.10
+Version: 17.7
 Release: 1%{?dist}
 Epoch: 1
 License: GPLv2
@@ -34,6 +34,7 @@ Requires: /sbin/extlinux
 %ifarch ppc
 Requires: yaboot
 %endif
+Requires: dumpet
 BuildRequires: python
 BuildRequires: /usr/bin/pod2man
 
@@ -57,6 +58,7 @@ Requires: system-config-keyboard >= 1.3.0
 Requires: python-urlgrabber
 Requires: libselinux-python
 Requires: dbus-python
+Requires: policycoreutils
 
 %description -n python-imgcreate
 Python modules that can be used for building images for things
@@ -99,45 +101,63 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/imgcreate/*.pyc
 
 %changelog
-* Sun Mar 11 2012 Arkady L. Shane <ashejn@russianfedora.ru> 16.10-1.R
-- apply rfremix menu patch
+* Sun Apr  8 2012 Arkady L. Shane <ashejn@russianfedora.ru> 17.7-1
+- apply new menu
 
-* Wed Dec 21 2011 Brian C. Lane <bcl@redhat.com> 16.10-1
-- Version 16.10 (bcl)
+* Thu Mar 01 2012 Brian C. Lane <bcl@redhat.com> 17.7-1
+- Version 17.7 (bcl)
+- livecd-iso-to-disk: Add 2MB slop to calculation (bcl)
+- Change EFI/boot to EFI/BOOT (mjg)
+- Add support for generating EFI-bootable hybrid images (mjg)
+
+* Thu Feb 23 2012 Brian C. Lane <bcl@redhat.com> - 17.6-1
+- Version 17.6 (bcl)
+- livecd-iso-to-disk: create partition for iso (bcl)
+
+* Wed Feb 15 2012 Brian C. Lane <bcl@redhat.com> - 17.5-1
+- Version 17.5 (bcl)
+- check for valid script path before editing livecd image and update usage
+  options confusion (jboggs)
+- imgcreate: fix typo in ResizeError (bcl)
+- add missing selinux_mountpoint class object to edit-livecd (jboggs)
+
+* Wed Jan 18 2012 Brian C. Lane <bcl@redhat.com> - 17.4-1
+- Version 17.4 (bcl)
+- selinux may be off on the host, skip mount (#737064) (bcl)
+- Set base_persistdir (#741614) (bcl)
+- Fix the fix for dracut modules (#766955) (bcl)
+- Use dracut.conf.d instead fo dracut.conf (bcl)
+- dracut needs dmsquash-live explicitly included (bcl)
+- edit-livecd: -k --kickstart option (apevec)
+
+* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1:17.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
+* Wed Dec 21 2011 Brian C. Lane <bcl@redhat.com> 17.3-1
+- Version 17.3 (bcl)
 - python-imgcreate: remove -f from second lokkit call (#769457) (bcl)
 - Install edit-livecd to /usr/bin (bcl)
 
-* Thu Nov 03 2011 Brian C. Lane <bcl@redhat.com> 16.9-1
-- Version 16.9 (bcl)
+* Thu Nov 03 2011 Brian C. Lane <bcl@redhat.com> 17.2-1
+- Version 17.2 (bcl)
 - Fix indent and typo in liveimage-mount (#749643) (bcl)
 - Make sure the target is labeled LIVE (#751213) (bcl)
-
-* Wed Oct 26 2011 Brian C. Lane <bcl@redhat.com> 16.8-1
-- Version 16.8 (bcl)
-- Correct patch (#748344) (bcl)
-
-* Mon Oct 24 2011 Brian C. Lane <bcl@redhat.com> 16.7-1
-- Version 16.7 (bcl)
-- Add dracut args to EFI grub.conf creation (#748344) (bcl)
-
-* Wed Sep 14 2011 Brian C. Lane <bcl@redhat.com> 16.6-1
-- Version 16.6 (bcl)
+- Only check first match for boot flag (#739411) (bcl)
 - Stop creating backup image before resizing (#737243) (bcl)
-- Correct some syslinux typos (#738381) (bcl)
-- splash is now png (#738381) (bcl)
 
-* Thu Sep 01 2011 Brian C. Lane <bcl@redhat.com> 16.5-1
-- Version 16.5 (bcl)
+* Thu Sep 01 2011 Brian C. Lane <bcl@redhat.com> 17.1-1
+- Version 17.1 (bcl)
 - Add title and product args (#669120) (bcl)
 - Skip bind mounts when source isn't there (bcl)
 - Add new syslinux.cfg template (#734173) (bcl)
-
-* Fri Aug 26 2011 Brian C. Lane <bcl@redhat.com> 16.4-1
-- Version 16.4 (bcl)
 - Use copyFile on the iso (bcl)
 - Use rsync to copy if available (bcl)
+
+* Thu Aug 11 2011 Brian C. Lane <bcl@redhat.com> 17.0-1
+- Version 17.0
 - Quote $SRC so iso's with spaces will work (#694915) (bruno)
 - Handle move to /sys/fs/selinux (#728576) (dwalsh)
+- master is now v17.X (bcl)
 - Turn on the legacy_boot flag for EFI (#680563) (bcl)
 - Don't ask about replacing MBR when formatting (bcl)
 - Make MBR replacement message more clear (bcl)
